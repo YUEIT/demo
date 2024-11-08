@@ -32,6 +32,9 @@ class KeyboardLayout(context: Context, attrs: AttributeSet?)
 
 
     private fun initView() {
+        if (isInEditMode) {
+            return
+        }
         BarUtils.fixSystemBarInsetsWithKeyboard(getContext() as Activity) { _, s, n, k ->
             navHeight = n
             if (k > 0) {

@@ -15,7 +15,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -25,6 +24,7 @@ import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.activity.rx.RxLifecycleProvider
 import cn.yue.base.utils.app.BarUtils
 import cn.yue.base.utils.code.LanguageUtils
+import cn.yue.base.widget.BottomBar
 import cn.yue.base.widget.TopBar
 import java.util.UUID
 
@@ -36,8 +36,10 @@ abstract class BaseFragmentActivity : FragmentActivity() {
 
     private lateinit var lifecycleProvider: ILifecycleProvider<Lifecycle.Event>
     private var topBar: TopBar? = null
-    private var topFL: FrameLayout? = null
+    private var bottomBar: BottomBar? = null
+    private var vTop: FrameLayout? = null
     private var content: FrameLayout? = null
+    private var vBottom: FrameLayout? = null
 
     private var resultCode = 0
     private var resultBundle: Bundle? = null
@@ -71,12 +73,12 @@ abstract class BaseFragmentActivity : FragmentActivity() {
     open fun initView() {
         registerOnBackPressed()
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        BarUtils.fullStatusBar(this.window)
+        BarUtils.fullScreen(this.window)
         setContentView(getContentViewLayoutId())
-        topFL = findViewById(R.id.topBar)
-        if ((topFL?.childCount ?: 0) <= 0) {
-            topFL?.addView(TopBar(this).also { topBar = it })
-        }
+        vTop = findViewById(R.id.v_top)
+        initTopBar()
+        vBottom = findViewById(R.id.v_bottom)
+        initBottomBar()
         content = findViewById(R.id.content)
         content?.setBackgroundColor(Color.WHITE)
         supportFragmentManager.addOnBackStackChangedListener(FragmentManager.OnBackStackChangedListener {
@@ -90,29 +92,38 @@ abstract class BaseFragmentActivity : FragmentActivity() {
         replace(getFragment(), null, false)
     }
 
+    open fun initTopBar() {
+        vTop?.addView(getTopBar().apply { topBar = this })
+    }
+
+    open fun initBottomBar() {
+        vBottom?.addView(getBottomBar().apply { bottomBar = this })
+    }
+
     fun getTopBar(): TopBar {
         return topBar ?: TopBar(this)
     }
 
-    fun customTopBar(view: View?) {
-        topFL?.removeAllViews()
-        topFL?.addView(view)
+    fun getBottomBar(): BottomBar {
+        return bottomBar ?: BottomBar(this)
     }
 
-    fun customTopBar(): View? {
-        return topFL?.getChildAt(0)
+    fun customTopBar(view: View?) {
+        vTop?.removeAllViews()
+        vTop?.addView(view)
+    }
+
+    fun customBottomBar(view: View?) {
+        vBottom?.removeAllViews()
+        vBottom?.addView(view)
     }
 
     fun removeTopBar() {
-        topFL?.removeView(topBar)
+        vTop?.removeAllViews()
     }
 
-    fun immersiveTopBar() {
-        val layoutParams = content?.layoutParams
-        if (layoutParams is ConstraintLayout.LayoutParams) {
-            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-            content?.layoutParams = layoutParams
-        }
+    fun removeBottomBar() {
+        vBottom?.removeAllViews()
     }
 
     fun setContentBackground(@ColorInt color: Int) {

@@ -3,14 +3,11 @@ package cn.yue.test.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import cn.yue.base.mvvm.components.BaseVMFragment
-import cn.yue.base.utils.app.BarUtils
 import cn.yue.base.utils.code.setOnSingleClickListener
-import cn.yue.base.widget.TopBar
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentLoginBinding
 import cn.yue.test.helper.GlobalEventBus
@@ -29,12 +26,6 @@ class LoginFragment : BaseVMFragment<LoginViewModel>() {
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_login
-    }
-
-    override fun initTopBar(topBar: TopBar) {
-        super.initTopBar(topBar)
-        topBar.setBarVisibility(View.GONE)
-        BarUtils.fullScreen(mActivity.window, true)
     }
 
     private lateinit var binding: FragmentLoginBinding

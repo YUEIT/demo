@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/topBar"
+        android:id="@+id/v_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -14,7 +14,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/topBar"/>
+        android:layout_below="@+id/v_top"/>
 
     <cn.yue.base.widget.viewpager.SampleTabStrip2
         android:id="@+id/tabs"

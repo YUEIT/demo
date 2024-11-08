@@ -25,6 +25,7 @@ import cn.yue.base.utils.app.RunTimePermissionUtil.requestPermissions
 import cn.yue.base.utils.code.getString
 import cn.yue.base.utils.debug.LogUtils
 import cn.yue.base.utils.variable.TimeUtils
+import cn.yue.base.view.TitleBar
 import cn.yue.base.widget.TopBar
 import cn.yue.base.widget.recyclerview.CommonAdapter
 import cn.yue.base.widget.recyclerview.CommonViewHolder
@@ -40,10 +41,16 @@ class SelectPhotoFragment : BaseFragment() {
     private val photoList: MutableList<MediaData> = ArrayList()
     private var page = 0
     private var isCanLoadMore = true
-    override fun initTopBar(topBar: TopBar) {}
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_select_photo
+    }
+
+    private var titleBar: TitleBar? = null
+
+    override fun initTopBar(topBar: TopBar) {
+//        super.initTopBar(topBar)
+        titleBar = topBar.getTitleBar()
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -77,7 +84,7 @@ class SelectPhotoFragment : BaseFragment() {
                             if (getSelectList().size < getMaxNum() || it.isSelected) {
                                 it.isSelected = !it.isSelected
                                 addSelectList(mediaData, it.isSelected)
-                                topBar.setRightTextStr(
+                                titleBar?.setRightTextStr(
                                     if (getSelectList().isEmpty()) {
                                         R.string.app_cancel.getString()
                                     } else {
@@ -93,7 +100,7 @@ class SelectPhotoFragment : BaseFragment() {
                         if (getSelectList().size < getMaxNum() || it.isSelected) {
                             it.isSelected = !it.isSelected
                             addSelectList(mediaData, it.isSelected)
-                            topBar.setRightTextStr(
+                            titleBar?.setRightTextStr(
                                 if (getSelectList().isEmpty()) {
                                     R.string.app_cancel.getString()
                                 } else {

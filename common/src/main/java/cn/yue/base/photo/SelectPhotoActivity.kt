@@ -12,14 +12,15 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import cn.yue.base.R
 import cn.yue.base.activity.BaseFragment
 import cn.yue.base.activity.BaseFragmentActivity
-import cn.yue.base.R
 import cn.yue.base.photo.data.MediaData
 import cn.yue.base.photo.data.MediaType
 import cn.yue.base.router.Route
 import cn.yue.base.utils.code.getParcelableArrayListExt
 import cn.yue.base.utils.code.getString
+import cn.yue.base.view.TitleBar
 import cn.yue.base.widget.viewpager.SampleTabStrip2
 
 /**
@@ -32,7 +33,7 @@ class SelectPhotoActivity : BaseFragmentActivity() {
     private var photoList: MutableList<MediaData> = ArrayList()
     private var mediaType: MediaType = MediaType.ALL
     private var isPreview: Boolean = false
-
+    private var titleBar: TitleBar? = null
     private lateinit var viewPager: ViewPager2
     private lateinit var tabs: SampleTabStrip2
 
@@ -58,27 +59,28 @@ class SelectPhotoActivity : BaseFragmentActivity() {
         }
     }
 
-    private fun initTopBar() {
-        getTopBar().setLeftImage(R.drawable.app_icon_back)
+    override fun initTopBar() {
+        super.initTopBar()
+        titleBar = TitleBar(this).setLeftImage(R.drawable.app_icon_back)
             .setLeftClickListener{ finish() }
             .setRightTextStr(if (photoList.isEmpty()) {
                 R.string.app_cancel.getString()
             } else {
                 "${R.string.app_confirm.getString()}(" + photoList.size + "/" + maxNum + ")"
             })
-            .setRightClickListener{
+            .setRightClickListener {
                 if (photoList.isEmpty()) {
                     finish()
                 } else {
                     finishAllWithResult(photoList as ArrayList<MediaData>)
                 }
             }
+        getTopBar().addView(titleBar)
     }
 
     override fun initView() {
         super.initView()
         initBundle()
-        initTopBar()
         if (tabTitle.isEmpty()) {
             tabTitle.add(R.string.app_photos_folder_select.getString())
             tabTitle.add(R.string.app_photos_folder_nearly.getString())
@@ -181,7 +183,7 @@ class SelectPhotoActivity : BaseFragmentActivity() {
 
     private fun changeTopBar(title: String?) {
         if (getCurrentFragment() is SelectPhotoFolderFragment) {
-            getTopBar().setCenterTextStr(title)
+            titleBar!!.setCenterTextStr(title)
                 .setCenterImage(0)
                 .setCenterClickListener {  }
                 .setLeftImage(R.drawable.app_icon_back)
@@ -190,7 +192,7 @@ class SelectPhotoActivity : BaseFragmentActivity() {
                 .setRightTextStr(R.string.app_cancel.getString())
                 .setRightClickListener{ finish() }
         } else if (getCurrentFragment() is SelectPhotoFragment) {
-            getTopBar().setCenterTextStr(title)
+            titleBar!!.setCenterTextStr(title)
                 .setCenterImage(R.drawable.app_icon_search)
                 .setCenterClickListener {
                     changeFragment(

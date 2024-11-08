@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import cn.yue.base.R
 import cn.yue.base.activity.BaseFragment
 import cn.yue.base.router.Route
+import cn.yue.base.view.TitleBar
 import cn.yue.base.widget.TopBar
 
 /**
@@ -32,11 +33,14 @@ class ViewPhotoFragment : BaseFragment() {
             currentIndex = getInt("position")
         }
     }
-    
+
+    private var titleBar: TitleBar? = null
+
     override fun initTopBar(topBar: TopBar) {
         super.initTopBar(topBar)
+        titleBar = topBar.getTitleBar()
         if (photoUriList.isNotEmpty()) {
-            topBar.setCenterTextStr((currentIndex + 1).toString() + "/" + photoUriList.size)
+            titleBar?.setCenterTextStr((currentIndex + 1).toString() + "/" + photoUriList.size)
         }
     }
 
@@ -48,7 +52,7 @@ class ViewPhotoFragment : BaseFragment() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 if (photoUriList.isNotEmpty()) {
-                    topBar.setCenterTextStr((position + 1).toString() + "/" + photoUriList.size)
+                    titleBar?.setCenterTextStr((position + 1).toString() + "/" + photoUriList.size)
                 }
             }
 

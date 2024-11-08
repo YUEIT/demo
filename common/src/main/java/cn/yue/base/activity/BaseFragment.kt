@@ -19,6 +19,7 @@ import cn.yue.base.R
 import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.activity.rx.RxLifecycleProvider
 import cn.yue.base.mvp.IWaitView
+import cn.yue.base.widget.BottomBar
 import cn.yue.base.widget.TopBar
 import cn.yue.base.widget.dialog.WaitDialog
 
@@ -26,9 +27,8 @@ import cn.yue.base.widget.dialog.WaitDialog
 abstract class BaseFragment : Fragment(), IWaitView {
 
     private lateinit var lifecycleProvider: ILifecycleProvider<Lifecycle.Event>
-    private var cacheView: View? = null
     lateinit var mActivity: BaseFragmentActivity
-    lateinit var topBar: TopBar
+    private var cacheView: View? = null
     var mHandler = Handler(Looper.getMainLooper())
 
     /**
@@ -83,8 +83,10 @@ abstract class BaseFragment : Fragment(), IWaitView {
         savedInstanceState: Bundle?
     ): View? {
         if (cacheView == null || !needCache()) {//如果view没有被初始化或者不需要缓存的情况下，重新初始化控件
-            topBar = mActivity.getTopBar()
+            val topBar = mActivity.getTopBar()
             initTopBar(topBar)
+            val bottomBar = mActivity.getBottomBar()
+            initBottomBar(bottomBar)
             cacheView = if (getLayoutId() == 0) {
                 null
             } else {
@@ -114,10 +116,10 @@ abstract class BaseFragment : Fragment(), IWaitView {
 
     open fun initTopBar(topBar: TopBar) {
         if (parentFragment == null) {
-            topBar.visibility = View.VISIBLE
-            topBar.setLeftImage(R.drawable.app_icon_back)
-            topBar.setLeftImageTint("#663db8".toColorInt())
-            topBar.setLeftClickListener { finishAll() }
+            topBar.setDefaultTitleBar()
+                .setLeftImage(R.drawable.app_icon_back)
+                .setLeftImageTint("#663db8".toColorInt())
+                .setLeftClickListener { finishAll() }
         }
     }
 
@@ -127,6 +129,14 @@ abstract class BaseFragment : Fragment(), IWaitView {
 
     fun hideTopBar() {
         mActivity.getTopBar().visibility = View.GONE
+    }
+
+    open fun initBottomBar(bottomBar: BottomBar) {
+
+    }
+
+    fun hideBottomBar() {
+        mActivity.getBottomBar().visibility = View.GONE
     }
 
     override fun onDetach() {

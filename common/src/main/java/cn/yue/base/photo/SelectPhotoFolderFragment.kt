@@ -25,10 +25,12 @@ import java.util.concurrent.Executors
 class SelectPhotoFolderFragment : BaseFragment() {
     private var commonAdapter: CommonAdapter<MediaFolderVO>? = null
 
-    override fun initTopBar(topBar: TopBar) {}
-
     override fun getLayoutId(): Int {
         return R.layout.fragment_select_photo
+    }
+
+    override fun initTopBar(topBar: TopBar) {
+//        super.initTopBar(topBar)
     }
 
     override fun initView(savedInstanceState: Bundle?) {

@@ -2,8 +2,9 @@ package cn.yue.test.test
 
 import android.os.Bundle
 import cn.yue.base.activity.BaseFragment
+import cn.yue.base.mvp.photo.PhotoHelper
 import cn.yue.base.router.Route
-import cn.yue.base.utils.app.BarUtils
+import cn.yue.base.widget.BottomBar
 import cn.yue.base.widget.TopBar
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentTestBinding
@@ -20,13 +21,27 @@ class TestFragment : BaseFragment() {
 
     override fun initTopBar(topBar: TopBar) {
         super.initTopBar(topBar)
-        hideTopBar()
+    }
+
+    override fun initBottomBar(bottomBar: BottomBar) {
+        super.initBottomBar(bottomBar)
+        hideBottomBar()
+    }
+
+    private val photoHelper = PhotoHelper(this).apply {
+        setOnSelectedListener { helper, _ ->
+            helper.cropPhoto()
+        }
+        setOnCroppedListener { helper, cropImage ->
+            helper.startPreview(cropImage)
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        BarUtils.fullScreen(mActivity.window)
         val binding = FragmentTestBinding.bind(requireView())
-
+        binding.flTest.setOnClickListener {
+            photoHelper.openAlbum()
+        }
     }
 
 //    override fun initObserver() {

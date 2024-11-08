@@ -55,7 +55,7 @@ class SampleTabStrip2(context: Context, attrs: AttributeSet? = null)
 		indicatorPaint = Paint()
 		indicatorPaint.isAntiAlias = true
 		indicatorPaint.style = Paint.Style.FILL
-		indicatorPaint.color = a.getColor(R.styleable.SampleTabStrip_stsIndicatorColor, Color.TRANSPARENT)
+		indicatorPaint.color = a.getColor(R.styleable.SampleTabStrip2_sts2IndicatorColor, Color.TRANSPARENT)
 		a.recycle()
 		layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
 	}

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import cn.yue.base.activity.BaseFragment
 import cn.yue.base.net.observer.WrapperObserver
 import cn.yue.base.photo.SelectPhotoActivity
 import cn.yue.base.photo.data.MediaData
+import cn.yue.base.photo.preview.ViewMediaActivity
 import cn.yue.base.utils.app.RunTimePermissionUtil.requestPermissions
 import cn.yue.base.utils.code.getString
 import cn.yue.base.utils.debug.ToastUtils
@@ -29,7 +31,7 @@ import kotlinx.coroutines.withContext
  * Description :
  * Created by yue on 2019/6/18
  */
-class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView) {
+class PhotoHelper(val fragment: BaseFragment) {
 
 	private var targetUri: Uri? = null
 	private var cachePhotoUri: Uri? = null
@@ -40,6 +42,18 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 	fun setMaxNum(maxNum: Int): PhotoHelper {
 		this.maxNum = maxNum
 		return this
+	}
+
+	private var onSelectedListener: ((helper: PhotoHelper, selectList: List<MediaData>?) -> Unit)? = null
+
+	fun setOnSelectedListener(listener: (helper: PhotoHelper, selectList: List<MediaData>?) -> Unit) {
+		this.onSelectedListener = listener
+	}
+
+	private var onCroppedListener: ((helper: PhotoHelper, cropImage: MediaData) -> Unit)? = null
+
+	fun setOnCroppedListener(listener: (helper: PhotoHelper, cropImage: MediaData) -> Unit) {
+		this.onCroppedListener = listener
 	}
 
 	private val selectSystemPhotoLauncher = fragment.registerForActivityResult(
@@ -53,7 +67,7 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 					uri = cachePhotoUri
 				}
 				temp.add(mediaData)
-				iPhotoView.selectImageResult(this, temp)
+				onSelectedListener?.invoke(this, temp)
 			}
 		}
 	}
@@ -85,7 +99,7 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 				if (selectList.size == 1) {
 					cachePhotoUri = selectList[0].uri
 				}
-				iPhotoView.selectImageResult(this, selectList)
+				onSelectedListener?.invoke(this, selectList)
 			}
 		}
 	}
@@ -139,7 +153,7 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 				uri = cachePhotoUri
 			}
 			temp.add(mediaData)
-			iPhotoView.selectImageResult(this, temp)
+			onSelectedListener?.invoke(this, temp)
 		}
 	}
 
@@ -171,7 +185,7 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 		ActivityResultContracts.StartActivityForResult()
 	) {
 		if (it.resultCode == Activity.RESULT_OK) {
-			iPhotoView.cropImageResult(this, MediaData().apply {
+			onCroppedListener?.invoke(this, MediaData().apply {
 				uri = cachePhotoUri!!
 				url = cropFilePath
 			})
@@ -234,5 +248,14 @@ class PhotoHelper(val fragment: BaseFragment, private val iPhotoView: IPhotoView
 					successBlock = success
 				)
 			)
+	}
+
+	fun startPreview(data: MediaData) {
+		val intent = Intent(fragment.mActivity, ViewMediaActivity::class.java)
+		val bundle = Bundle()
+		bundle.putParcelableArrayList("uris", arrayListOf(data.uri))
+		intent.putExtras(bundle)
+		fragment.mActivity.startActivity(intent)
+
 	}
 }

@@ -1,5 +1,6 @@
 package cn.yue.test.route
 
+import cn.yue.base.photo.preview.ViewMediaActivity
 import cn.yue.base.router.FRouter
 import cn.yue.base.router.RouteMeta
 import cn.yue.base.router.RouteType
@@ -30,6 +31,11 @@ object AppRouter {
             RouteType.FRAGMENT,
             TestListFragment::class.java,
             RoutePath.TEST_LIST
+        )
+        atlas[RoutePath.VIEW_MEDIA] = RouteMeta.build(
+            RouteType.ACTIVITY,
+            ViewMediaActivity::class.java,
+            RoutePath.VIEW_MEDIA
         )
     }
 
