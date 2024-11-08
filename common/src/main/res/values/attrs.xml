@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HeaderScrollView">
+        <attr name="hvp_topOffset" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsDividerColor" format="color"/>
+        <attr name="pstsDividerPadding" format="dimension"/>
+        <attr name="pstsDividerWidth" format="dimension" />
+        <attr name="pstsTabPadding" format="dimension"/>
+        <attr name="pstsScrollOffset" format="dimension"/>
+        <attr name="pstsTabBackground" format="reference"/>
+        <attr name="pstsShouldExpand" format="boolean"/>
+        <attr name="pstsTextAllCaps" format="boolean"/>
+        <attr name="pstsTextColor" format="color"/>
+        <attr name="pstsSelectedTextColor" format="color"/>
+        <attr name="pstsTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="pstsSelectedTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="pstsTextSize" format="dimension"/>
+        <attr name="pstsIndicatorWidth" format="dimension"/>
+        <attr name="pstsIndicatorHeight" format="dimension"/>
+        <attr name="pstsIndicatorColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="SampleTabStrip">
+        <attr name="stsTabPadding" format="dimension"/>
+        <attr name="stsScrollOffsetStart" format="dimension"/>
+        <attr name="stsScrollOffsetEnd" format="dimension"/>
+        <attr name="stsTabBackground" format="reference"/>
+        <attr name="stsShouldExpand" format="boolean"/>
+        <attr name="stsTextAllCaps" format="boolean"/>
+        <attr name="stsIndicatorHeight" format="dimension"/>
+        <attr name="stsIndicatorWidth" format="dimension"/>
+        <attr name="stsIndicatorColor" format="color"/>
+        <attr name="stsIndicatorCap" format="enum">
+            <enum name="round" value="0" />
+            <enum name="rect" value="1" />
+        </attr>
+        <attr name="stsIndicatorSrc" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SampleTabStrip2">
+        <attr name="sts2ShouldExpand" format="boolean"/>
+        <attr name="sts2IndicatorHeight" format="dimension"/>
+        <attr name="sts2IndicatorWidth" format="dimension"/>
+        <attr name="sts2IndicatorMarginBottom" format="dimension"/>
+        <attr name="sts2IndicatorColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="border_radius" format="dimension" />
+        <attr name="border_radius_tl" format="dimension" />
+        <attr name="border_radius_tr" format="dimension" />
+        <attr name="border_radius_bl" format="dimension" />
+        <attr name="border_radius_br" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="border_width" format="dimension" />
+        <attr name="foreground" format="reference|color" />
+        <attr name="view_type" format="enum">
+            <enum name="round" value="0" />
+            <enum name="circle" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="FormattedEditText">
+        <attr name="fet_mode" format="enum">
+            <enum name="mode_simple" value="0" />
+            <enum name="mode_complex" value="1" />
+            <enum name="mode_mask" value="2" />
+            <enum name="mode_hint" value="3" />
+        </attr>
+        <attr name="fet_formatStyle" format="string" />
+        <attr name="fet_placeholder" format="string" />
+        <attr name="fet_emptyPlaceholder" format="string" />
+        <attr name="fet_hintTextColor" format="color" />
+        <attr name="fet_hintText" format="string" />
+        <attr name="fet_mark" format="string" />
+        <attr name="fet_showHintWhileEmpty" format="boolean" />
+        <attr name="fet_clearDrawable" format="reference" />
+        <attr name="fet_drawablePadding" format="dimension" />
+        <attr name="fet_drawableGravity" format="enum">
+            <enum name="fet_top" value="0" />
+            <enum name="fet_center" value="1" />
+            <enum name="fet_bottom" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Emojicon">
+        <attr name="emojiconSize" format="dimension"/>
+        <attr name="emojiconTextStart" format="integer"/>
+        <attr name="emojiconTextLength" format="integer"/>
+        <attr name="emojiconUseSystemDefault" format="boolean"/>
+        <attr name="emojiconCopy" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="ExcelPanel">
+        <attr name="left_width" format="dimension" />
+        <attr name="top_height" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeBackground">
+        <attr name="shape_radius" format="dimension"/>
+        <attr name="shape_radius_tl" format="dimension"/>
+        <attr name="shape_radius_tr" format="dimension"/>
+        <attr name="shape_radius_bl" format="dimension"/>
+        <attr name="shape_radius_br" format="dimension"/>
+        <attr name="shape_color" format="color"/>
+        <attr name="shape_start_color" format="color"/>
+        <attr name="shape_center_color" format="color"/>
+        <attr name="shape_end_color" format="color" />
+        <attr name="shape_stroke_width" format="dimension"/>
+        <attr name="shape_stroke_color" format="color" />
+        <attr name="shape_angle" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="BottomLineView">
+        <attr name="fullOffset" format="dimension"/>
+        <attr name="keyboardOpenOffset" format="dimension" />
+        <attr name="keyboardEnable" format="boolean" />
+    </declare-styleable>
+
+
+    <attr name="fitTop" format="enum" >
+        <enum name="normal" value="0" />
+        <enum name="inside" value="1" />
+        <enum name="outside" value="2" />
+    </attr>
+    <attr name="fitBottom" format="enum" >
+        <enum name="normal" value="0" />
+        <enum name="inside" value="1" />
+        <enum name="outside" value="2" />
+    </attr>
+    <attr name="fitKeyboard" format="enum" >
+        <enum name="normal" value="0" />
+        <enum name="inside" value="1" />
+        <enum name="outside" value="2" />
+    </attr>
+
+    <declare-styleable name="ContainerInnerLayout_Layout">
+        <attr name="fitTop" />
+        <attr name="fitBottom" />
+        <attr name="fitKeyboard" />
+    </declare-styleable>
+
+    <declare-styleable name="ContainerOuterLayout">
+        <attr name="fitTop" />
+        <attr name="fitBottom" />
+        <attr name="fitKeyboard" />
+    </declare-styleable>
+</resources>

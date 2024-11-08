@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="id_top_view" type="id"/>
+    <item name="id_bottom_view" type="id" />
+    <item name="id_keyboard_bottom_view" type="id" />
+    <item name="id_keyboard_container" type="id" />
+    <item name="id_keyboard_emotion" type="id" />
+    <item name="id_keyboard_input" type="id" />
+    <item name="id_keyboard_switch" type="id" />
+</resources>
