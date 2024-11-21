@@ -11,6 +11,10 @@ import cn.yue.test.R
  */
 class TestListFragment : BasePageVMFragment<TestListViewModel, TestBean>() {
 
+    override fun needScaffold(): Boolean {
+        return false
+    }
+
     override fun initAdapter(): CommonAdapter<TestBean> {
         return object : CommonAdapter<TestBean>() {
             override fun getLayoutIdByType(viewType: Int): Int {

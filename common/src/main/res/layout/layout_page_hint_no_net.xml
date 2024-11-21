@@ -35,7 +35,7 @@
             android:paddingEnd="50dp"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/shape_bg_ffba43_radius_18"
+            android:background="@drawable/shape_bg_btn_yellow"
             android:textColor="#ffffff"
             android:textSize="12sp"
             android:text="@string/app_reload" />

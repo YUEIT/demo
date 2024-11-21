@@ -28,15 +28,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         viewBinding = true
-        dataBinding = true
     }
     packaging {
         resources {
@@ -73,11 +72,15 @@ dependencies {
     api(libs.rxandroid)
     api(libs.glide)
     api(libs.gson)
-    api(libs.exoplayer)
     api(libs.okhttp)
     api(libs.okhttp.log)
     api(libs.retrofit)
     api(libs.retrofit.adapter.rxjava)
     api(libs.retrofit.converter.gson)
     api(libs.material)
+    api(libs.androidx.startup.runtime)
+    api(libs.androidx.media3.exoplayer)
+    api(libs.androidx.media3.exoplayer.dash)
+    api(libs.androidx.media3.ui)
+    api(libs.androidx.window)
 }

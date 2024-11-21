@@ -47,14 +47,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
-        dataBinding = true
         viewBinding = true
     }
     composeOptions {
@@ -75,12 +74,8 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.view)
     implementation(libs.androidx.splashscreen)
-    implementation("com.tencent.tav:libpag:4.0.5.10")
+
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-bom:32.7.0")
     implementation("com.google.firebase:firebase-messaging")
@@ -90,5 +85,12 @@ dependencies {
     implementation("com.google.android.gms:play-services-base:18.3.0")
     implementation("com.android.billingclient:billing:7.0.0")
     implementation("com.android.billingclient:billing-ktx:7.0.0")
-    implementation("com.tencent.tav:libpag:4.3.57")
+
+    implementation("androidx.camera:camera-mlkit-vision:1.4.0")
+    implementation("androidx.camera:camera-core:1.4.0")
+    implementation("androidx.camera:camera-camera2:1.4.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-view:1.4.0")
+
+    implementation("com.google.mlkit:barcode-scanning:17.0.2")
 }

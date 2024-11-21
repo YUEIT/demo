@@ -4,8 +4,7 @@ import android.os.Bundle
 import cn.yue.base.activity.BaseFragment
 import cn.yue.base.mvp.photo.PhotoHelper
 import cn.yue.base.router.Route
-import cn.yue.base.widget.BottomBar
-import cn.yue.base.widget.TopBar
+import cn.yue.base.utils.app.BarUtils
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentTestBinding
 
@@ -19,18 +18,14 @@ class TestFragment : BaseFragment() {
         return R.layout.fragment_test
     }
 
-    override fun initTopBar(topBar: TopBar) {
-        super.initTopBar(topBar)
-    }
-
-    override fun initBottomBar(bottomBar: BottomBar) {
-        super.initBottomBar(bottomBar)
-        hideBottomBar()
+    override fun needScaffold(): Boolean {
+        return false
     }
 
     private val photoHelper = PhotoHelper(this).apply {
-        setOnSelectedListener { helper, _ ->
-            helper.cropPhoto()
+        setOnSelectedListener { helper, list ->
+//            helper.cropPhoto(false, 1, 1)
+            helper.startPreview(list!![0])
         }
         setOnCroppedListener { helper, cropImage ->
             helper.startPreview(cropImage)
@@ -39,8 +34,9 @@ class TestFragment : BaseFragment() {
 
     override fun initView(savedInstanceState: Bundle?) {
         val binding = FragmentTestBinding.bind(requireView())
+        BarUtils.fixStatusBarMargin(binding.flTest)
         binding.flTest.setOnClickListener {
-            photoHelper.openAlbum()
+            photoHelper.openSystemAlbum()
         }
     }
 

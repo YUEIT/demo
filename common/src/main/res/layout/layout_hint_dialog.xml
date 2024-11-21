@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/shape_bg_white_radius_10">
+        android:background="@drawable/shape_bg_hint_dialog">
 
         <TextView
             android:id="@+id/titleTV"
@@ -60,7 +60,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="@string/app_cancel"
-                android:textColor="@drawable/selector_bg_4a4a4a_to_9b9b9b"
+                android:textColor="@drawable/selector_bg_btn"
                 android:textSize="15sp" />
 
             <View
@@ -78,7 +78,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="@string/app_confirm"
-                android:textColor="@drawable/selector_bg_4a4a4a_to_9b9b9b"
+                android:textColor="@drawable/selector_bg_btn"
                 android:textSize="15sp" />
         </LinearLayout>
     </RelativeLayout>

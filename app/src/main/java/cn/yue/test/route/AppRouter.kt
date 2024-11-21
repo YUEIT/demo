@@ -1,10 +1,12 @@
 package cn.yue.test.route
 
 import cn.yue.base.photo.preview.ViewMediaActivity
-import cn.yue.base.router.FRouter
 import cn.yue.base.router.RouteMeta
 import cn.yue.base.router.RouteType
+import cn.yue.base.router.Router
+import cn.yue.test.camera.ScanFragment
 import cn.yue.test.login.LoginFragment
+import cn.yue.test.main.MainActivity
 import cn.yue.test.test.TestFragment
 import cn.yue.test.test.TestListFragment
 
@@ -13,10 +15,15 @@ object AppRouter {
     fun init() {
         val routes = HashMap<String, RouteMeta>()
         loadInto(routes)
-        FRouter.init(routes)
+        Router.init(routes)
     }
 
     private fun loadInto(atlas: HashMap<String, RouteMeta>) {
+        atlas[RoutePath.MAIN] = RouteMeta.build(
+            RouteType.ACTIVITY,
+            MainActivity::class.java,
+            RoutePath.MAIN
+        )
         atlas[RoutePath.LOGIN] = RouteMeta.build(
             RouteType.FRAGMENT,
             LoginFragment::class.java,
@@ -36,6 +43,11 @@ object AppRouter {
             RouteType.ACTIVITY,
             ViewMediaActivity::class.java,
             RoutePath.VIEW_MEDIA
+        )
+        atlas[RoutePath.SCAN] = RouteMeta.build(
+            RouteType.ACTIVITY,
+            ScanFragment::class.java,
+            RoutePath.SCAN
         )
     }
 

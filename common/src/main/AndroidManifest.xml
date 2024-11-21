@@ -20,20 +20,22 @@
         android:label="@string/app_name">
 
         <activity android:name="cn.yue.base.activity.CommonActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-
-        <activity android:name="cn.yue.base.activity.BaseFragmentActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"/>
 
         <activity android:name="cn.yue.base.photo.SelectPhotoActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"/>
 
         <activity android:name="cn.yue.base.photo.preview.ViewMediaActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"/>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+                <meta-data  android:name="cn.yue.base.init.BaseInitializer"
+                    android:value="androidx.startup" />
+        </provider>
     </application>
 
 </manifest>

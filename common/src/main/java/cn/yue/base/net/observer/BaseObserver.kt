@@ -1,7 +1,6 @@
 package cn.yue.base.net.observer
 
 import cn.yue.base.R
-import cn.yue.base.event.NotifyViewModel
 import cn.yue.base.mvp.IStatusView
 import cn.yue.base.net.ResponseCode
 import cn.yue.base.net.ResultException
@@ -64,7 +63,7 @@ open class WrapperNetObserver<T: Any>(
 
 	private fun onLoginInvalid() {
 		ToastUtils.showShortToast(R.string.app_login_fail.getString())
-		NotifyViewModel.getLoadStatus().setValue(-1)
+
 	}
 
 }
@@ -110,7 +109,7 @@ class WrapperPullObserver<T: Any>(
 
 	private fun onLoginInvalid() {
 		ToastUtils.showShortToast(R.string.app_login_fail.getString())
-		NotifyViewModel.getLoadStatus().setValue(-1)
+
 	}
 
 }

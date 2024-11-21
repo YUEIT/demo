@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cn.yue.base.activity.BaseFragmentActivity
-import cn.yue.base.router.FRouter
-import cn.yue.test.route.RoutePath
+import cn.yue.base.router.Router
+import cn.yue.test.main.MainActivity
 
 class LaunchActivity : BaseFragmentActivity() {
 
@@ -20,12 +20,13 @@ class LaunchActivity : BaseFragmentActivity() {
         toStart()
     }
 
-    override fun getContentViewLayoutId(): Int {
-        return R.layout.activity_launch
+    override fun initView() {
+        super.initView()
+        setContentView(R.layout.activity_launch)
     }
 
     private fun toStart() {
-        FRouter.instance.build(RoutePath.TEST).navigation(this)
+        Router.instance.setComponent(MainActivity::class).navigation(this)
         finish()
     }
 }

@@ -33,7 +33,7 @@ class LoginFragment : BaseVMFragment<LoginViewModel>() {
         thirdLoginHelper.init()
         binding = FragmentLoginBinding.bind(requireView())
         binding.loginTV.setOnSingleClickListener {
-//            FRouter.instance.build(RoutePath.TEST).navigation(mActivity)
+
         }
         binding.flContainer.setOnClickListener {
             GlobalEventBus.timeState.update { it + 1 }

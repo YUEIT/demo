@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
+import androidx.fragment.app.Fragment
 import cn.yue.base.R
 import cn.yue.base.activity.BaseDialogFragment
 import cn.yue.base.activity.BaseFragment
@@ -19,7 +20,7 @@ import cn.yue.base.utils.debug.ToastUtils
  * Description :
  * Created by yue on 2023/7/21
  */
-class ARouterImpl: INavigation() {
+class RouterImpl: INavigation() {
 	
 	private lateinit var mRouterCard: RouterCard
 	
@@ -30,7 +31,32 @@ class ARouterImpl: INavigation() {
 	
 	private fun getRouteType(): RouteType {
 		if (TextUtils.isEmpty(mRouterCard.getPath())) {
-			return RouteType.UNKNOWN
+			val componentName = mRouterCard.getComponentName() ?: return RouteType.UNKNOWN
+			val routeMeta = RouterWarehouse.findRouteMeta(componentName)
+			if (routeMeta?.type != null) {
+				return routeMeta.type!!
+			}
+			try {
+				val clazz = Class.forName(componentName)
+				val type = if (Activity::class.java.isAssignableFrom(clazz)) {
+					RouteType.ACTIVITY
+				} else if (Fragment::class.java.isAssignableFrom(clazz)) {
+					RouteType.FRAGMENT
+				} else {
+					RouteType.UNKNOWN
+				}
+				if (routeMeta != null) {
+					routeMeta.type = type
+				} else {
+					RouterWarehouse.routes[componentName] = RouteMeta().apply {
+						this.type = type
+						this.destination = clazz
+					}
+				}
+				return type
+			} catch (e : ClassNotFoundException) {
+				return RouteType.UNKNOWN
+			}
 		}
 		val routeMeta = RouterWarehouse.findRouteMeta(mRouterCard.getPath())
 		return routeMeta?.type ?: RouteType.UNKNOWN
@@ -38,7 +64,24 @@ class ARouterImpl: INavigation() {
 
 	private fun getDestination(): String {
 		if (TextUtils.isEmpty(mRouterCard.getPath())) {
-			return ""
+			val componentName = mRouterCard.getComponentName() ?: ""
+			val routeMeta = RouterWarehouse.findRouteMeta(componentName)
+			if (routeMeta?.destination != null) {
+				return routeMeta.destination!!.name
+			}
+			try {
+				val clazz = Class.forName(componentName)
+				if (routeMeta != null) {
+					routeMeta.destination = clazz
+				} else {
+					RouterWarehouse.routes[componentName] = RouteMeta().apply {
+						this.destination = clazz
+					}
+				}
+				return componentName
+			} catch (e : ClassNotFoundException) {
+				return ""
+			}
 		}
 		val routeMeta = RouterWarehouse.findRouteMeta(mRouterCard.getPath())
 		return routeMeta?.destination?.name ?: ""
@@ -65,7 +108,7 @@ class ARouterImpl: INavigation() {
 				return
 			}
 			else -> {
-				ToastUtils.showLongToast("no find page")
+				ToastUtils.showShortToast(R.string.app_find_not_page.getString())
 				return
 			}
 		}

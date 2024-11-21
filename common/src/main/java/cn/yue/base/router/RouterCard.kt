@@ -10,7 +10,6 @@ import cn.yue.base.activity.TransitionAnimation.getStartEnterAnim
 import cn.yue.base.activity.TransitionAnimation.getStartExitAnim
 import cn.yue.base.utils.debug.ToastUtils
 import java.io.Serializable
-import java.lang.ref.WeakReference
 
 /**
  * Description : 路由数据
@@ -31,6 +30,8 @@ class RouterCard() : INavigation(), Parcelable {
     private var pactUrl: String? = null
 
     private var path: String? = null
+
+    private var componentName: String? = null
 
     private var flags = 0
 
@@ -104,6 +105,15 @@ class RouterCard() : INavigation(), Parcelable {
             }
         }
         return path
+    }
+
+    fun setComponentName(componentName: String?): RouterCard {
+        this.componentName = componentName
+        return this
+    }
+
+    fun getComponentName(): String? {
+        return componentName
     }
 
     fun setUri(uri: Uri?): RouterCard {

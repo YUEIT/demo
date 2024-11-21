@@ -16,7 +16,7 @@ import cn.yue.base.utils.device.NotificationUtils
 import cn.yue.base.utils.device.NotificationUtils.hasPermission
 import cn.yue.base.utils.device.NotificationUtils.initChannelConfig
 
-object NotificationConfig {
+object NotificationUtils {
 
     private const val CHANNEL_ID = "YUE_CHANNEL"
     private const val CHANNEL_LOW_ID = "YUE_CHANNEL_LOW"

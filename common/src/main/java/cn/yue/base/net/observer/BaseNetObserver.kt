@@ -1,7 +1,6 @@
 package cn.yue.base.net.observer
 
 import cn.yue.base.R
-import cn.yue.base.event.NotifyViewModel
 import cn.yue.base.net.ResponseCode
 import cn.yue.base.net.ResultException
 import cn.yue.base.utils.code.getString
@@ -53,7 +52,7 @@ abstract class BaseNetObserver<T: Any> : SingleObserver<T> {
 
     private fun onLoginInvalid() {
         ToastUtils.showShortToast(R.string.app_login_fail.getString())
-        NotifyViewModel.getLoadStatus().setValue(-1)
+
     }
 
 }

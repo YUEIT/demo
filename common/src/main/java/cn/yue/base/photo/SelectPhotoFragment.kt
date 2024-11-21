@@ -25,8 +25,6 @@ import cn.yue.base.utils.app.RunTimePermissionUtil.requestPermissions
 import cn.yue.base.utils.code.getString
 import cn.yue.base.utils.debug.LogUtils
 import cn.yue.base.utils.variable.TimeUtils
-import cn.yue.base.view.TitleBar
-import cn.yue.base.widget.TopBar
 import cn.yue.base.widget.recyclerview.CommonAdapter
 import cn.yue.base.widget.recyclerview.CommonViewHolder
 import java.util.concurrent.Executors
@@ -46,11 +44,8 @@ class SelectPhotoFragment : BaseFragment() {
         return R.layout.fragment_select_photo
     }
 
-    private var titleBar: TitleBar? = null
-
-    override fun initTopBar(topBar: TopBar) {
-//        super.initTopBar(topBar)
-        titleBar = topBar.getTitleBar()
+    override fun needScaffold(): Boolean {
+        return false
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -84,7 +79,7 @@ class SelectPhotoFragment : BaseFragment() {
                             if (getSelectList().size < getMaxNum() || it.isSelected) {
                                 it.isSelected = !it.isSelected
                                 addSelectList(mediaData, it.isSelected)
-                                titleBar?.setRightTextStr(
+                                (mActivity as SelectPhotoActivity).setTitleOpText(
                                     if (getSelectList().isEmpty()) {
                                         R.string.app_cancel.getString()
                                     } else {
@@ -100,7 +95,7 @@ class SelectPhotoFragment : BaseFragment() {
                         if (getSelectList().size < getMaxNum() || it.isSelected) {
                             it.isSelected = !it.isSelected
                             addSelectList(mediaData, it.isSelected)
-                            titleBar?.setRightTextStr(
+                            (mActivity as SelectPhotoActivity).setTitleOpText(
                                 if (getSelectList().isEmpty()) {
                                     R.string.app_cancel.getString()
                                 } else {
@@ -200,7 +195,7 @@ class SelectPhotoFragment : BaseFragment() {
         }
         false
     }
-    
+
     private fun getSelectList(): MutableList<MediaData> {
         return (mActivity as SelectPhotoActivity).getPhotoList()
     }

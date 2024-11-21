@@ -28,13 +28,9 @@ public class PaymentActivity extends BaseFragmentActivity {
     }
 
     @Override
-    public int getContentViewLayoutId() {
-        return R.layout.fragment_payment;
-    }
-
-    @Override
     public void initView() {
         super.initView();
+        setContentView(R.layout.fragment_payment);
         FragmentPaymentBinding binding = FragmentPaymentBinding.inflate(getLayoutInflater());
         binding.tvPayment.setOnClickListener(v -> {
             paymentHelper.startPayment(this, "", "", new OnPaymentListener() {

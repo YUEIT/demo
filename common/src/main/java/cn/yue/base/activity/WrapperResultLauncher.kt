@@ -2,7 +2,7 @@ package cn.yue.base.activity
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import cn.yue.base.router.FRouter
+import cn.yue.base.router.Router
 import cn.yue.base.router.RouterCard
 
 /**
@@ -19,7 +19,7 @@ fun WrapperResultLauncher.launch(
 	toActivity: String? = null,
 	block: ((routerCard: RouterCard) -> Unit)? = null
 ) {
-	val route = FRouter.instance.build(path)
+	val route = Router.instance.build(path)
 	block?.invoke(route)
 	route.navigation(this, 0, toActivity)
 }

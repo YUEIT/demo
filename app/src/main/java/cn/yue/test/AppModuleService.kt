@@ -1,8 +1,6 @@
 package cn.yue.test
 
-import android.app.Application
 import android.content.Context
-import cn.yue.base.init.AutoSizeInitUtils
 import cn.yue.base.module.IAppModule
 
 /**
@@ -12,7 +10,7 @@ import cn.yue.base.module.IAppModule
 class AppModuleService : IAppModule {
 
     override fun init(context: Context) {
-        AutoSizeInitUtils.init(context as Application)
+
     }
     
 }

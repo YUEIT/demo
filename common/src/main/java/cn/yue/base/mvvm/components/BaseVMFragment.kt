@@ -12,7 +12,7 @@ import cn.yue.base.activity.BaseFragment
 import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.mvvm.BaseViewModel
 import cn.yue.base.mvvm.ItemViewModel
-import cn.yue.base.router.FRouter
+import cn.yue.base.router.Router
 import java.lang.reflect.ParameterizedType
 /**
  * Description :
@@ -68,7 +68,7 @@ abstract class BaseVMFragment<VM : BaseViewModel> : BaseFragment() {
             }
         }
         viewModel.routerEvent singleObserve { (routerCard, requestCode, toActivity) ->
-            FRouter.instance
+            Router.instance
                 .bindRouterCard(routerCard)
                 .navigation(mActivity, requestCode, toActivity)
         }

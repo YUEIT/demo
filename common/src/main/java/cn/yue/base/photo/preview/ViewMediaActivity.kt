@@ -3,12 +3,12 @@ package cn.yue.base.photo.preview
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import cn.yue.base.activity.BaseFragmentActivity
+import cn.yue.base.activity.CommonActivity
 import cn.yue.base.photo.data.MediaType
 import cn.yue.base.utils.app.FragmentUtils
 import cn.yue.base.video.ViewVideoFragment
 
-class ViewMediaActivity : BaseFragmentActivity() {
+class ViewMediaActivity : CommonActivity() {
 
     override fun getFragment(): Fragment {
         val photoUriList = intent.getParcelableArrayListExtra<Uri>("uris")

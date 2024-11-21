@@ -168,17 +168,17 @@ object BarUtils {
         }
     }
 
-    fun paddingToStatusBar(view: View) {
+    fun fixStatusBarPadding(view: View) {
         view.setPadding(0, getFixStatusBarHeight(), 0, 0)
     }
 
-    fun marginToStatusBar(view: View) {
+    fun fixStatusBarMargin(view: View) {
         val layoutParams = view.layoutParams as MarginLayoutParams
         layoutParams.topMargin = getFixStatusBarHeight()
         view.layoutParams = layoutParams
     }
 
-    fun marginToTopBar(view: View) {
+    fun fixTopBarMargin(view: View) {
         val layoutParams = view.layoutParams as MarginLayoutParams
         layoutParams.topMargin = getFixStatusBarHeight() + DisplayUtils.dip2px(40)
         view.layoutParams = layoutParams

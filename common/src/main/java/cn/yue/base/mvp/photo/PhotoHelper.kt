@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import cn.yue.base.R
@@ -39,11 +40,6 @@ class PhotoHelper(val fragment: BaseFragment) {
 	private var selectCache: MutableList<MediaData> = ArrayList()
 	private var maxNum: Int = 1
 
-	fun setMaxNum(maxNum: Int): PhotoHelper {
-		this.maxNum = maxNum
-		return this
-	}
-
 	private var onSelectedListener: ((helper: PhotoHelper, selectList: List<MediaData>?) -> Unit)? = null
 
 	fun setOnSelectedListener(listener: (helper: PhotoHelper, selectList: List<MediaData>?) -> Unit) {
@@ -54,6 +50,22 @@ class PhotoHelper(val fragment: BaseFragment) {
 
 	fun setOnCroppedListener(listener: (helper: PhotoHelper, cropImage: MediaData) -> Unit) {
 		this.onCroppedListener = listener
+	}
+
+	private val pickMediaLauncher = fragment.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+		if (it != null) {
+			cachePhotoUri = it
+			val temp: MutableList<MediaData> = ArrayList()
+			val mediaData = MediaData().apply {
+				uri = cachePhotoUri
+			}
+			temp.add(mediaData)
+			onSelectedListener?.invoke(this, temp)
+		}
+	}
+
+	fun openPickMedia() {
+		pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 	}
 
 	private val selectSystemPhotoLauncher = fragment.registerForActivityResult(
@@ -73,19 +85,8 @@ class PhotoHelper(val fragment: BaseFragment) {
 	}
 
 	fun openSystemAlbum() {
-		val selectBlock = {
-			val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-			selectSystemPhotoLauncher.launch(intent)
-		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			fragment.mActivity.requestPermissions({
-				selectBlock.invoke()
-			}, {}, Manifest.permission.READ_MEDIA_IMAGES)
-		} else {
-			fragment.mActivity.requestPermissions({
-				selectBlock.invoke()
-			}, {}, Manifest.permission.READ_EXTERNAL_STORAGE)
-		}
+		val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+		selectSystemPhotoLauncher.launch(intent)
 	}
 
 	private val selectPhotoLauncher = fragment.registerForActivityResult(
@@ -219,7 +220,7 @@ class PhotoHelper(val fragment: BaseFragment) {
 				intent.putExtra("aspectX", aspectX)
 				intent.putExtra("aspectY", aspectY)
 			}
-			intent.putExtra("scale", false)
+			intent.putExtra("scale", true)
 			//若为false则表示不返回数据
 			intent.putExtra("return-data", false)
 			intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())

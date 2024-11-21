@@ -14,8 +14,6 @@ import androidx.core.content.ContextCompat
 import cn.yue.base.R
 import cn.yue.base.activity.BaseFragmentActivity
 import cn.yue.base.utils.code.getString
-import cn.yue.base.utils.code.hasValue
-import cn.yue.base.utils.debug.ToastUtils
 import cn.yue.base.widget.dialog.HintDialog
 
 /**
@@ -32,16 +30,20 @@ object RunTimePermissionUtil {
             if (this.checkPermissions(*permissions)) {
                 success.invoke()
             } else {
-                this.launchPermissions(success, {
-                    val noPermission = this.shouldShowToSettingHint(*permissions)
-                    if (noPermission.hasValue()) {
-                        showFailDialog(this, getPermissionName(noPermission))
-                    } else {
-                        ToastUtils.showShortToast(R.string.app_permission_request_fail.getString()
-                            .replace("%d", getPermissionName(noPermission)))
+                val launch = {
+                    this.launchPermissions(success, {
+                        showFailDialog(this)
+                        failed.invoke(it)
+                    }, *permissions)
+                }
+                val shouldHints = this.shouldShowToSettingHint(*permissions)
+                if (shouldHints.isNotEmpty()) {
+                    showHintDialog(this, getPermissionName(*permissions)) {
+                        launch.invoke()
                     }
-                    failed.invoke(it)
-                }, *permissions)
+                } else {
+                    launch.invoke()
+                }
             }
         }
     }
@@ -56,16 +58,20 @@ object RunTimePermissionUtil {
             if (this.checkPermissions(*permissions)) {
                 success.invoke()
             } else {
-                this.launchPermissions(success, {
-                    val noPermission = this.shouldShowToSettingHint(*permissions)
-                    if (noPermission.hasValue()) {
-                        showFailDialog(this, getPermissionName(noPermission), false)
-                    } else {
-                        ToastUtils.showShortToast(R.string.app_permission_request_fail.getString()
-                            .replace("%d", getPermissionName(noPermission)))
+                val launch = {
+                    this.launchPermissions(success, {
+                        showFailDialog(this, false)
+                        failed.invoke(it)
+                    }, *permissions)
+                }
+                val shouldHints = this.shouldShowToSettingHint(*permissions)
+                if (shouldHints.isNotEmpty()) {
+                    showHintDialog(this, getPermissionName(*permissions)) {
+                        launch.invoke()
                     }
-                    failed.invoke(it)
-                }, *permissions)
+                } else {
+                    launch.invoke()
+                }
             }
         }
     }
@@ -88,19 +94,16 @@ object RunTimePermissionUtil {
         return true
     }
 
-    /**
-     * 必须在launchPermissions方法调用之后执行，剥离掉其他情况
-     * @return 权限被禁止且无法弹出授权框的情况下的权限
-     */
-    fun Activity.shouldShowToSettingHint(vararg permissions: String): String {
-        var limitPermission = ""
+
+    fun Activity.shouldShowToSettingHint(vararg permissions: String): Array<String> {
+        val permissionList = ArrayList<String>()
         for (p in permissions) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, p)) {
-                limitPermission = p
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, p)) {
+                permissionList.add(p)
                 break
             }
         }
-        return limitPermission
+        return permissionList.toTypedArray()
     }
 
     /**
@@ -137,11 +140,24 @@ object RunTimePermissionUtil {
         return permissionList.toTypedArray()
     }
 
-
-    fun showFailDialog(activity: Activity, noPermission: String, canCancel: Boolean = true) {
+    fun showHintDialog(activity: Activity, permission: String, block: () -> Unit) {
         HintDialog.Builder(activity)
-            .setContentStr(R.string.app_permission_no_granted_and_to_request.getString()
-                .replace("%d", noPermission))
+            .setContentStr(R.string.app_permission_request_reason.getString()
+                .replace("%d", permission))
+            .setCanCanceled(false)
+            .setSingleClick(true)
+            .setRightClickStr(R.string.app_confirm.getString())
+            .setOnRightClickListener {
+                block.invoke()
+            }
+            .build()
+            .show()
+    }
+
+
+    fun showFailDialog(activity: Activity, canCancel: Boolean = true) {
+        HintDialog.Builder(activity)
+            .setContentStr(R.string.app_permission_no_granted_and_to_request.getString())
             .setCanCanceled(canCancel)
             .setLeftClickStr(R.string.app_cancel.getString())
             .setRightClickStr(R.string.app_confirm.getString())
@@ -169,6 +185,15 @@ object RunTimePermissionUtil {
             val intent = Intent(Settings.ACTION_SETTINGS)
             startActivity(intent)
         }
+    }
+
+    fun getPermissionName(vararg permissions: String): String {
+        val str = StringBuilder()
+        permissions.forEach {
+            str.append(getPermissionName(it))
+                .append(" ")
+        }
+        return str.toString()
     }
 
     fun getPermissionName(permission: String): String {

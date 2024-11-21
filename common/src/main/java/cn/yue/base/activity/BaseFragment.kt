@@ -3,6 +3,7 @@ package cn.yue.base.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,8 +20,9 @@ import cn.yue.base.R
 import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.activity.rx.RxLifecycleProvider
 import cn.yue.base.mvp.IWaitView
-import cn.yue.base.widget.BottomBar
-import cn.yue.base.widget.TopBar
+import cn.yue.base.view.BottomBarView
+import cn.yue.base.view.ScaffoldLayout
+import cn.yue.base.view.TopBarView
 import cn.yue.base.widget.dialog.WaitDialog
 
 
@@ -83,14 +85,10 @@ abstract class BaseFragment : Fragment(), IWaitView {
         savedInstanceState: Bundle?
     ): View? {
         if (cacheView == null || !needCache()) {//如果view没有被初始化或者不需要缓存的情况下，重新初始化控件
-            val topBar = mActivity.getTopBar()
-            initTopBar(topBar)
-            val bottomBar = mActivity.getBottomBar()
-            initBottomBar(bottomBar)
             cacheView = if (getLayoutId() == 0) {
                 null
             } else {
-                inflater.inflate(getLayoutId(), container, false)
+                doCreateView(inflater, container)
             }
             hasCache = false
         } else {
@@ -103,6 +101,38 @@ abstract class BaseFragment : Fragment(), IWaitView {
         return cacheView
     }
 
+    open fun needScaffold(): Boolean {
+        return true
+    }
+
+    private fun doCreateView(inflater: LayoutInflater,
+                               container: ViewGroup?): View {
+        if (needScaffold()) {
+            val v = inflater.inflate(R.layout.fragment_base, container, false)
+            val scaffold = v.findViewById<ScaffoldLayout>(R.id.v_scaffold)
+            scaffold.setContentView(getLayoutId())
+            initTopBar(scaffold.getTopBar())
+            initBottomBar(scaffold.getBottomBar())
+            return v
+        } else {
+            return inflater.inflate(getLayoutId(), container, false)
+        }
+    }
+
+    open fun initTopBar(topBarView: TopBarView) {
+        topBarView.setBgColor(Color.WHITE)
+            .setDefaultTitleBar()
+            .setLeftImage(R.drawable.app_icon_back)
+            .setLeftImageTint("#663db8".toColorInt())
+            .setLeftClickListener {
+                finishAll()
+            }
+    }
+
+    open fun initBottomBar(bottomBarView: BottomBarView) {
+
+    }
+
     /**
      * true 避免当前Fragment被replace后回退回来重走onCreateView，导致重复初始化View和数据
      */
@@ -113,31 +143,6 @@ abstract class BaseFragment : Fragment(), IWaitView {
     private var hasCache: Boolean = false
 
     abstract fun initView(savedInstanceState: Bundle?)
-
-    open fun initTopBar(topBar: TopBar) {
-        if (parentFragment == null) {
-            topBar.setDefaultTitleBar()
-                .setLeftImage(R.drawable.app_icon_back)
-                .setLeftImageTint("#663db8".toColorInt())
-                .setLeftClickListener { finishAll() }
-        }
-    }
-
-    fun customTopBar(view: View) {
-        mActivity.customTopBar(view)
-    }
-
-    fun hideTopBar() {
-        mActivity.getTopBar().visibility = View.GONE
-    }
-
-    open fun initBottomBar(bottomBar: BottomBar) {
-
-    }
-
-    fun hideBottomBar() {
-        mActivity.getBottomBar().visibility = View.GONE
-    }
 
     override fun onDetach() {
         super.onDetach()
@@ -231,8 +236,6 @@ abstract class BaseFragment : Fragment(), IWaitView {
         finishAllWithResult(Activity.RESULT_OK, intent)
     }
 
-    //--------------------------------------------------------------------------------------------------------------
-
     fun <T : View> requireViewById(resId: Int): T {
         var view: T? = null
         if (cacheView != null) {
@@ -250,99 +253,6 @@ abstract class BaseFragment : Fragment(), IWaitView {
             view = cacheView!!.findViewById<T>(resId)
         }
         return view
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val fragments = childFragmentManager.fragments
-        for (fragment in fragments) {
-            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
-
-    fun replace(containViewId: Int, fragment: Fragment?) {
-        if (null != fragment) {
-            childFragmentManager.beginTransaction()
-                .replace(containViewId, fragment)
-                .commitAllowingStateLoss()
-        }
-    }
-
-    fun replace(containViewId: Int, fragment: Fragment?, tag: String) {
-        if (null != fragment) {
-            childFragmentManager.beginTransaction()
-                .replace(containViewId, fragment, tag)
-                .commitAllowingStateLoss()
-        }
-    }
-
-    fun removeFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
-    }
-
-    fun removeFragment(tag: String) {
-        val fragment = childFragmentManager.findFragmentByTag(tag)
-        if (fragment != null) {
-            removeFragment(fragment)
-        }
-    }
-
-
-    fun attachFragment(fragment: Fragment?): Boolean {
-        if (fragment != null && fragment.isDetached) {
-            childFragmentManager.beginTransaction().attach(fragment).commitAllowingStateLoss()
-            return true
-        }
-        return false
-    }
-
-    fun attachFragment(tag: String): Boolean {
-        val fragment = findFragmentByTag(tag)
-        return attachFragment(fragment)
-    }
-
-    fun isAddFragment(tag: String): Boolean {
-        val fragment = findFragmentByTag(tag)
-        return fragment != null && fragment.isAdded
-    }
-
-    fun detachFragment(fragment: Fragment?): Boolean {
-        if (fragment != null && fragment.isAdded) {
-            childFragmentManager.beginTransaction().detach(fragment).commitAllowingStateLoss()
-            return true
-        }
-        return false
-    }
-
-    fun detachFragment(tag: String): Boolean {
-        val fragment = findFragmentByTag(tag)
-        return detachFragment(fragment)
-    }
-
-    fun findFragmentByTag(tag: String): Fragment? {
-        return childFragmentManager.findFragmentByTag(tag)
-    }
-
-    fun addFragment(containerId: Int, fragment: Fragment, tag: String) {
-        childFragmentManager.beginTransaction()
-            .add(containerId, fragment, tag)
-            .commitAllowingStateLoss()
-    }
-
-    fun hideFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .hide(fragment)
-            .commitAllowingStateLoss()
-    }
-
-    fun showFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .show(fragment)
-            .commitAllowingStateLoss()
     }
 
     private var waitDialog: WaitDialog? = null

@@ -2,6 +2,7 @@ package cn.yue.base.photo
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import cn.yue.base.photo.data.MediaData
 import cn.yue.base.photo.data.MediaFolderVO
 import cn.yue.base.photo.data.MediaType
 import cn.yue.base.utils.code.getString
-import cn.yue.base.widget.TopBar
 import cn.yue.base.widget.recyclerview.CommonAdapter
 import cn.yue.base.widget.recyclerview.CommonViewHolder
 import java.util.concurrent.Executors
@@ -23,14 +23,15 @@ import java.util.concurrent.Executors
  * Created by yue on 2019/3/11
  */
 class SelectPhotoFolderFragment : BaseFragment() {
+
     private var commonAdapter: CommonAdapter<MediaFolderVO>? = null
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_select_photo
     }
 
-    override fun initTopBar(topBar: TopBar) {
-//        super.initTopBar(topBar)
+    override fun needScaffold(): Boolean {
+        return false
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -71,7 +72,7 @@ class SelectPhotoFolderFragment : BaseFragment() {
             }
         }
 
-    private var handler = Handler(Handler.Callback { msg ->
+    private var handler = Handler(Looper.getMainLooper()) { msg ->
         if (msg.what == 101) {
             allFolder.clear()
             if (msg.obj is MutableList<*>) {
@@ -80,7 +81,7 @@ class SelectPhotoFolderFragment : BaseFragment() {
             commonAdapter?.setList(allFolder)
         }
         false
-    })
+    }
 
     private fun getMediaType(): MediaType {
         return (mActivity as SelectPhotoActivity).getMediaType()

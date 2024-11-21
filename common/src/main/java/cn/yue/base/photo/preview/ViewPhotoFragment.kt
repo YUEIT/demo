@@ -9,8 +9,8 @@ import androidx.viewpager.widget.ViewPager
 import cn.yue.base.R
 import cn.yue.base.activity.BaseFragment
 import cn.yue.base.router.Route
-import cn.yue.base.view.TitleBar
-import cn.yue.base.widget.TopBar
+import cn.yue.base.view.TitleBarView
+import cn.yue.base.view.TopBarView
 
 /**
  * Description :
@@ -34,11 +34,11 @@ class ViewPhotoFragment : BaseFragment() {
         }
     }
 
-    private var titleBar: TitleBar? = null
+    private var titleBar: TitleBarView? = null
 
-    override fun initTopBar(topBar: TopBar) {
-        super.initTopBar(topBar)
-        titleBar = topBar.getTitleBar()
+    override fun initTopBar(topBarView: TopBarView) {
+        super.initTopBar(topBarView)
+        titleBar = topBarView.getTitleBar()
         if (photoUriList.isNotEmpty()) {
             titleBar?.setCenterTextStr((currentIndex + 1).toString() + "/" + photoUriList.size)
         }

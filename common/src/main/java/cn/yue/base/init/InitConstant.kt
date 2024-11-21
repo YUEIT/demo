@@ -19,16 +19,6 @@ object InitConstant {
 
     private var mDebug = true
 
-    private var mEnvironment: UrlEnvironment = UrlEnvironment.RELEASE
-
-    fun setServiceEnvironment(environment: UrlEnvironment) {
-        mEnvironment = environment
-    }
-
-    fun getServiceEnvironment(): UrlEnvironment {
-        return mEnvironment
-    }
-
     private var mVersionName: String? = null
 
     fun getVersionName(): String? {

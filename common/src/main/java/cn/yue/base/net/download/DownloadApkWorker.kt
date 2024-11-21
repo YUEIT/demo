@@ -7,11 +7,11 @@ import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkInfo
 import androidx.work.WorkerParameters
-import cn.yue.base.init.NotificationConfig
-import cn.yue.base.init.NotificationConfig.notify
-import cn.yue.base.init.NotificationConfig.setIntent
-import cn.yue.base.init.NotificationConfig.setShowContent
-import cn.yue.base.init.NotificationConfig.setTitle
+import cn.yue.base.init.NotificationUtils
+import cn.yue.base.init.NotificationUtils.notify
+import cn.yue.base.init.NotificationUtils.setIntent
+import cn.yue.base.init.NotificationUtils.setShowContent
+import cn.yue.base.init.NotificationUtils.setTitle
 import cn.yue.base.utils.Utils
 import cn.yue.base.utils.app.ActivityUtils
 
@@ -31,13 +31,13 @@ class DownloadApkWorker(context: Context, workerParameters: WorkerParameters)
 	}
 	
 	private fun createNotification(): Notification {
-		return NotificationConfig
+		return NotificationUtils
 			.getNotification("应用下载", "", 0, null)
 			.build()
 	}
 	
 	private fun notification(content: String, progress: Int?, intent: Intent?) {
-		NotificationConfig.getNotificationBuilder()
+		NotificationUtils.getNotificationBuilder()
 			.setTitle("应用下载")
 			.setShowContent(content, progress)
 			.setIntent(intent)

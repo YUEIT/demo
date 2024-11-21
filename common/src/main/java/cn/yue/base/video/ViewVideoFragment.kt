@@ -2,18 +2,18 @@ package cn.yue.base.video
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import cn.yue.base.R
 import cn.yue.base.activity.BaseFragment
 import cn.yue.base.router.Route
 import cn.yue.base.utils.code.getParcelableArrayListExt
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
 
 @Route(path = "/common/viewVideo")
 class ViewVideoFragment: BaseFragment() {
 
-    lateinit var simpleExoPlayer: SimpleExoPlayer
+    lateinit var exoPlayer: ExoPlayer
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_view_video
@@ -21,34 +21,34 @@ class ViewVideoFragment: BaseFragment() {
 
     override fun initView(savedInstanceState: Bundle?) {
         val playerView = requireViewById<PlayerView>(R.id.playerView)
-        simpleExoPlayer = SimpleExoPlayer.Builder(mActivity).build()
+        exoPlayer = ExoPlayer.Builder(mActivity).build()
         val uris = arguments?.getParcelableArrayListExt("uris", Uri::class)
         uris?.let {
-            playerView.player = simpleExoPlayer
+            playerView.player = exoPlayer
             for (uri in uris) {
                 val mediaItem: MediaItem = MediaItem.fromUri(uri)
-                simpleExoPlayer.addMediaItem(mediaItem)
+                exoPlayer.addMediaItem(mediaItem)
             }
-            simpleExoPlayer.prepare()
-            simpleExoPlayer.play()
+            exoPlayer.prepare()
+            exoPlayer.play()
         }
 
     }
 
     override fun onStart() {
         super.onStart()
-        if (!simpleExoPlayer.isPlaying) {
-            simpleExoPlayer.play()
+        if (!exoPlayer.isPlaying) {
+            exoPlayer.play()
         }
     }
 
     override fun onStop() {
         super.onStop()
-        simpleExoPlayer.pause()
+        exoPlayer.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        simpleExoPlayer.release()
+        exoPlayer.release()
     }
 }
