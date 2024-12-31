@@ -2,7 +2,7 @@ package cn.yue.base.net.download
 
 import androidx.lifecycle.LiveData
 import androidx.work.*
-import cn.yue.base.mvvm.data.CaseLiveData
+import cn.yue.base.fragment.data.CaseLiveData
 import cn.yue.base.utils.Utils
 import java.util.*
 

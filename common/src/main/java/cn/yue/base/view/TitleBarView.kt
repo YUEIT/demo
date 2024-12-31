@@ -15,19 +15,19 @@ import cn.yue.base.databinding.LayoutTopBarBinding
 class TitleBarView(context: Context, attributeSet: AttributeSet? = null)
     : FrameLayout(context, attributeSet) {
 
-    private val binding: LayoutTopBarBinding = LayoutTopBarBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding = LayoutTopBarBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
         defaultStyle()
     }
 
     private fun defaultStyle() {
-        binding.leftIV.visibility = View.GONE
-        binding.leftTV.visibility = View.GONE
-        binding.rightTV.visibility = View.GONE
-        binding.rightIV.visibility = View.GONE
+        binding.ivLeft.visibility = View.GONE
+        binding.tvLeft.visibility = View.GONE
+        binding.tvRight.visibility = View.GONE
+        binding.ivRight.visibility = View.GONE
         binding.divider.visibility = View.GONE
-        binding.centerIV.visibility = View.GONE
+        binding.ivCenter.visibility = View.GONE
     }
 
     fun setBgColor(@ColorInt color: Int): TitleBarView {
@@ -40,131 +40,108 @@ class TitleBarView(context: Context, attributeSet: AttributeSet? = null)
         return this
     }
 
-    fun setContentVisibility(visibility: Int): TitleBarView {
-        binding.barContentRL.visibility = visibility
-        return this
-    }
-
     fun setLeftTextStr(s: String?): TitleBarView {
-        binding.leftTV.visibility = View.VISIBLE
-        binding.leftTV.text = s
+        binding.tvLeft.visibility = View.VISIBLE
+        binding.tvLeft.text = s
         return this
     }
 
     fun setLeftImage(@DrawableRes resId: Int): TitleBarView {
-        binding.leftIV.visibility = View.VISIBLE
-        binding.leftIV.setImageResource(resId)
+        binding.ivLeft.visibility = View.VISIBLE
+        binding.ivLeft.setImageResource(resId)
         return this
     }
 
     fun setLeftImageTint(color: Int): TitleBarView {
-        binding.leftIV.imageTintList = ColorStateList.valueOf(color)
+        binding.ivLeft.imageTintList = ColorStateList.valueOf(color)
         return this
     }
 
     fun setLeftClickListener(onClickListener: ((view: View) -> Unit)?): TitleBarView {
-        binding.leftLL.setOnClickListener(onClickListener)
+        binding.llLeft.setOnClickListener(onClickListener)
         return this
     }
 
     fun setCenterTextStr(s: String?): TitleBarView {
-        binding.centerTV.visibility = View.VISIBLE
-        binding.centerTV.text = s
+        binding.tvCenter.visibility = View.VISIBLE
+        binding.tvCenter.text = s
         return this
     }
 
     fun setCenterClickListener(onClickListener: ((view: View) -> Unit)?): TitleBarView {
-        binding.centerLL.setOnClickListener(onClickListener)
+        binding.llCenter.setOnClickListener(onClickListener)
         return this
     }
 
     fun setRightTextStr(s: String?): TitleBarView {
-        binding.rightTV.visibility = View.VISIBLE
-        binding.rightTV.text = s
+        binding.tvRight.visibility = View.VISIBLE
+        binding.tvRight.text = s
         return this
     }
 
     fun setRightImage(@DrawableRes resId: Int): TitleBarView {
-        binding.rightIV.visibility = View.VISIBLE
-        binding.rightIV.setImageResource(resId)
-        return this
-    }
-
-    fun setRightCustomView(view: View): TitleBarView {
-        binding.customRightFL.removeAllViews()
-        binding.customRightFL.addView(view)
+        binding.ivRight.visibility = View.VISIBLE
+        binding.ivRight.setImageResource(resId)
         return this
     }
 
     fun setRightClickListener(onClickListener: ((view: View) -> Unit)?): TitleBarView {
-        binding.rightLL.setOnClickListener(onClickListener)
+        binding.llRight.setOnClickListener(onClickListener)
         return this
     }
 
     fun setLeftTextSize(sp: Float): TitleBarView {
-        binding.leftTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
+        binding.tvLeft.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         return this
     }
 
     fun setLeftTextColor(@ColorInt color: Int): TitleBarView {
-        binding.leftTV.setTextColor(color)
+        binding.tvLeft.setTextColor(color)
         return this
     }
 
     fun setLeftTextFont(resId: Int): TitleBarView {
-        binding.leftTV.typeface = ResourcesCompat.getFont(context, resId)
-        return this
-    }
-
-    fun setLeftCustomView(view: View): TitleBarView {
-        binding.customLeftFL.removeAllViews()
-        binding.customLeftFL.addView(view)
+        binding.tvLeft.typeface = ResourcesCompat.getFont(context, resId)
         return this
     }
 
     fun setCenterTextSize(sp: Float): TitleBarView {
-        binding.centerTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
+        binding.tvCenter.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         return this
     }
 
     fun setCenterTextFont(resId: Int): TitleBarView {
-        binding.centerTV.typeface = ResourcesCompat.getFont(context, resId)
+        binding.tvCenter.typeface = ResourcesCompat.getFont(context, resId)
         return this
     }
 
     fun setCenterTextColor(@ColorInt color: Int): TitleBarView {
-        binding.centerTV.setTextColor(color)
+        binding.tvCenter.setTextColor(color)
         return this
     }
 
     fun setCenterImage(resId: Int): TitleBarView {
         if (resId == 0) {
-            binding.centerIV.visibility = View.GONE
+            binding.ivCenter.visibility = View.GONE
         } else {
-            binding.centerIV.visibility = View.VISIBLE
-            binding.centerIV.setImageResource(resId)
+            binding.ivCenter.visibility = View.VISIBLE
+            binding.ivCenter.setImageResource(resId)
         }
         return this
     }
 
-    fun setCenterCustomView(view: View): TitleBarView {
-        binding.customCenterFL.removeAllViews()
-        binding.customCenterFL.addView(view)
-        return this
-    }
-
     fun setRightTextSize(sp: Float): TitleBarView {
-        binding.rightTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
+        binding.tvRight.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         return this
     }
 
     fun setRightTextColor(@ColorInt color: Int): TitleBarView {
-        binding.rightTV.setTextColor(color)
+        binding.tvRight.setTextColor(color)
         return this
     }
 
     fun setRightTextFont(resId: Int): TitleBarView {
-        binding.rightTV.typeface = ResourcesCompat.getFont(context, resId)
+        binding.tvRight.typeface = ResourcesCompat.getFont(context, resId)
         return this
     }
 

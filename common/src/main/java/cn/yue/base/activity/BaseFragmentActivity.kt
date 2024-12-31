@@ -4,29 +4,33 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.transition.Fade
+import android.transition.Slide
 import android.view.MotionEvent
 import android.view.Window
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
-import cn.yue.base.R
 import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.activity.rx.RxLifecycleProvider
-import cn.yue.base.utils.app.BarUtils
+import cn.yue.base.fragment.BaseFragment
+import cn.yue.base.router.RouterCard
+import cn.yue.base.router.WrapperResultLauncher
 import cn.yue.base.utils.code.LanguageUtils
 
 /**
  * Description :
  * Created by yue on 2019/3/11
  */
-abstract class BaseFragmentActivity : FragmentActivity() {
+abstract class BaseFragmentActivity : AppCompatActivity() {
 
     private lateinit var lifecycleProvider: ILifecycleProvider<Lifecycle.Event>
-
     private var mCache = HashMap<String, Any>()
+    val defaultLauncher = registerResultLauncher {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +58,22 @@ abstract class BaseFragmentActivity : FragmentActivity() {
     }
 
     open fun initView() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        BarUtils.fullScreen(this.window)
+        val transition = intent.getIntExtra(RouterCard.TRANSITION, TransitionAnimation.TRANSITION_RIGHT)
+        with(window) {
+            requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+            if (transition == TransitionAnimation.TRANSITION_CENTER) {
+                enterTransition = Fade()
+                exitTransition = Fade()
+            } else {
+                enterTransition = Slide().apply {
+                    slideEdge = TransitionAnimation.getEnterGravity(transition)
+                }
+                exitTransition = Slide().apply {
+                    slideEdge = TransitionAnimation.getExitGravity(transition)
+                }
+            }
+        }
+        enableEdgeToEdge()
     }
 
     fun getCacheValue(key: String): Any? {
@@ -64,15 +82,6 @@ abstract class BaseFragmentActivity : FragmentActivity() {
 
     fun putCache(key: String, value: Any) {
         mCache[key] = value
-    }
-
-    override fun onStop() {
-        super.onStop()
-        setExitAnim()
-    }
-
-    open fun setExitAnim() {
-        overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
     override fun onDestroy() {
@@ -131,9 +140,7 @@ abstract class BaseFragmentActivity : FragmentActivity() {
     private var permissionFailed: ((permission: List<String>) -> Unit)? = null
     
     fun registerResultLauncher(callback: ActivityResultCallback<ActivityResult>): WrapperResultLauncher {
-        return WrapperResultLauncher(this,
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), callback)
-        )
+        return WrapperResultLauncher(this, registerForActivityResult(ActivityResultContracts.StartActivityForResult(), callback),)
     }
 
     private val dispatchTouchListeners = arrayListOf<OnDispatchTouchListener>()

@@ -9,7 +9,7 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import cn.yue.base.activity.BaseFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentScanBinding
 import com.google.mlkit.vision.barcode.BarcodeScanner

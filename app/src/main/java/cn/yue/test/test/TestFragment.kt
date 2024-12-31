@@ -1,19 +1,26 @@
 package cn.yue.test.test
 
 import android.os.Bundle
-import cn.yue.base.activity.BaseFragment
-import cn.yue.base.mvp.photo.PhotoHelper
+import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import cn.yue.base.photo.helper.PhotoHelper
+import cn.yue.base.fragment.BaseVMFragment
 import cn.yue.base.router.Route
 import cn.yue.base.utils.app.BarUtils
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentTestBinding
+import cn.yue.test.helper.GlobalEventBus
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /**
  * Description:
  * Created by yue on 31/10/2024
  */
 @Route(path = "/app/test")
-class TestFragment : BaseFragment() {
+class TestFragment : BaseVMFragment<TestViewModel>() {
     override fun getLayoutId(): Int {
         return R.layout.fragment_test
     }
@@ -35,26 +42,28 @@ class TestFragment : BaseFragment() {
     override fun initView(savedInstanceState: Bundle?) {
         val binding = FragmentTestBinding.bind(requireView())
         BarUtils.fixStatusBarMargin(binding.flTest)
-        binding.flTest.setOnClickListener {
-            photoHelper.openSystemAlbum()
+        binding.vTest.setOnClickListener {
+            GlobalEventBus.timeState.update { it + 1 }
         }
     }
 
-//    override fun initObserver() {
-//        super.initObserver()
-//        GlobalEventBus.timeState
-//            .drop(1)
-//            .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-//            .syncCollect {
-//                Log.d("luo", "test timeState: $it")
-//            }
-//    }
-//
-//    fun <T> Flow<T>.syncCollect(block: (t: T) -> Unit) {
-//        lifecycleScope.launch {
-//            this@syncCollect.collect {
-//                block.invoke(it)
-//            }
-//        }
-//    }
+    override fun initObserver() {
+        super.initObserver()
+        lifecycleScope.launch {
+            launch {
+                GlobalEventBus.timeState
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+                    .collect {
+                        Log.d("luo", "test timeState1: $it")
+                    }
+            }
+            launch {
+                GlobalEventBus.timeState
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+                    .collect {
+                        Log.d("luo", "test timeState2: $it")
+                    }
+            }
+        }
+    }
 }

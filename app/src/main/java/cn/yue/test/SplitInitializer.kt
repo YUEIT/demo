@@ -21,16 +21,15 @@ import cn.yue.test.main.PlaceholderActivity
 class SplitInitializer : Initializer<RuleController> {
 
     override fun create(context: Context): RuleController {
-        return RuleController.getInstance(context).apply {
-            initRule(context)
-        }
+        return initRule(context)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
         return emptyList()
     }
 
-    private fun RuleController.initRule(context: Context) {
+    private fun initRule(context: Context): RuleController {
+        val ruleController = RuleController.getInstance(context)
         //分屏规则
         val splitPairFilter = SplitPairFilter(
             ComponentName(context, MainActivity::class.java),
@@ -39,7 +38,7 @@ class SplitInitializer : Initializer<RuleController> {
         )
         val filterSet = setOf(splitPairFilter)
         val splitAttributes: SplitAttributes = SplitAttributes.Builder()
-            .setSplitType(SplitAttributes.SplitType.ratio(0.33f))
+            .setSplitType(SplitAttributes.SplitType.ratio(0.5f))
             .setLayoutDirection(SplitAttributes.LayoutDirection.LEFT_TO_RIGHT)
             .build()
         val splitPairRule = SplitPairRule.Builder(filterSet)
@@ -51,7 +50,7 @@ class SplitInitializer : Initializer<RuleController> {
             .setFinishSecondaryWithPrimary(SplitRule.FinishBehavior.ALWAYS)
             .setClearTop(false)
             .build()
-        addRule(splitPairRule)
+        ruleController.addRule(splitPairRule)
 
         //站位规则
         val placeholderActivityFilter = ActivityFilter(
@@ -69,7 +68,7 @@ class SplitInitializer : Initializer<RuleController> {
             .setFinishPrimaryWithPlaceholder(SplitRule.FinishBehavior.ALWAYS)
             .setSticky(false)
             .build()
-        addRule(splitPlaceholderRule)
+        ruleController.addRule(splitPlaceholderRule)
 
         //全屏规则
         val expandedActivityFilter = ActivityFilter(
@@ -80,6 +79,7 @@ class SplitInitializer : Initializer<RuleController> {
         val activityRule = ActivityRule.Builder(expandedActivityFilterSet)
             .setAlwaysExpand(true)
             .build()
-        addRule(activityRule)
+        ruleController.addRule(activityRule)
+        return ruleController
     }
 }

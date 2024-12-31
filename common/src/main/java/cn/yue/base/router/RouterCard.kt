@@ -1,13 +1,10 @@
 package cn.yue.base.router
 
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.text.TextUtils
 import android.util.SparseArray
-import cn.yue.base.activity.TransitionAnimation.getStartEnterAnim
-import cn.yue.base.activity.TransitionAnimation.getStartExitAnim
 import cn.yue.base.utils.debug.ToastUtils
 import java.io.Serializable
 
@@ -21,10 +18,6 @@ class RouterCard() : INavigation(), Parcelable {
         this.navigation = navigation
     }
 
-    private var uri: Uri? = null
-
-    private var tag: Any? = null
-
     private var extras: Bundle = Bundle()
 
     private var pactUrl: String? = null
@@ -35,15 +28,7 @@ class RouterCard() : INavigation(), Parcelable {
 
     private var flags = 0
 
-    private var timeout = 0
-
-    private var enterAnim = 0
-
-    private var exitAnim = 0
-
     private var transition = 0 //入场方式
-
-    private var isInterceptLogin = false //是否登录拦截
 
     private var navigation: INavigation? = null
 
@@ -54,37 +39,8 @@ class RouterCard() : INavigation(), Parcelable {
     fun clear() {
         extras = Bundle()
         path = null
-        isInterceptLogin = false
         flags = 0
-        enterAnim = 0
-        exitAnim = 0
         transition = 0
-    }
-
-    fun setTag(tag: Any): RouterCard {
-        this.tag = tag
-        return this
-    }
-
-    fun getRealEnterAnim(): Int {
-        return if (enterAnim > 0) {
-            enterAnim
-        } else {
-            getStartEnterAnim(transition)
-        }
-    }
-
-    fun getRealExitAnim(): Int {
-        return if (exitAnim > 0) {
-            exitAnim
-        } else {
-            getStartExitAnim(transition)
-        }
-    }
-
-    fun setTimeout(timeout: Int): RouterCard {
-        this.timeout = timeout
-        return this
     }
 
     fun setPactUrl(pactUrl: String?): RouterCard {
@@ -114,11 +70,6 @@ class RouterCard() : INavigation(), Parcelable {
 
     fun getComponentName(): String? {
         return componentName
-    }
-
-    fun setUri(uri: Uri?): RouterCard {
-        this.uri = uri
-        return this
     }
 
     fun with(bundle: Bundle?): RouterCard {
@@ -294,41 +245,9 @@ class RouterCard() : INavigation(), Parcelable {
         }
     }
 
-    fun withTransition(enterAnim: Int, exitAnim: Int): RouterCard {
-        this.enterAnim = enterAnim
-        this.exitAnim = exitAnim
+    fun withTransition(transition: Int): RouterCard {
+        this.transition = transition
         return this
-    }
-
-    fun withTransitionStyle(transitionStyle: Int): RouterCard {
-        transition = transitionStyle
-        return this
-    }
-
-    override fun toString(): String {
-        return "RouterCard{" +
-                "uri=" + uri +
-                ", tag=" + tag +
-                ", mBundle=" + extras +
-                ", pactUrl='" + pactUrl + '\'' +
-                ", path='" + path + '\'' +
-                ", flags=" + flags +
-                ", timeout=" + timeout +
-                ", enterAnim=" + enterAnim +
-                ", exitAnim=" + exitAnim +
-                ", transition=" + transition +
-                ", isInterceptLogin=" + isInterceptLogin +
-                ", navigation=" + navigation +
-                '}'
-    }
-
-    fun setInterceptLogin(): RouterCard {
-        isInterceptLogin = true
-        return this
-    }
-
-    fun isInterceptLogin(): Boolean {
-        return isInterceptLogin
     }
 
     fun getFlags(): Int {
@@ -337,10 +256,6 @@ class RouterCard() : INavigation(), Parcelable {
 
     fun getExtras(): Bundle {
         return extras
-    }
-
-    fun getTimeout(): Int {
-        return timeout
     }
 
     fun getTransition(): Int {
@@ -359,31 +274,28 @@ class RouterCard() : INavigation(), Parcelable {
             target.navigation(context, requestCode, toActivity)
         }
     }
-    
-    constructor(source: Parcel) : this() {
-        uri = source.readParcelable(Uri::class.java.classLoader)
-        extras = source.readBundle()?: Bundle()
-        path = source.readString()
-        flags = source.readInt()
-        timeout = source.readInt()
-        enterAnim = source.readInt()
-        exitAnim = source.readInt()
-        transition = source.readInt()
-        isInterceptLogin = source.readByte().toInt() != 0
+
+    constructor(parcel: Parcel) : this() {
+        extras = parcel.readBundle(Bundle::class.java.classLoader)!!
+        pactUrl = parcel.readString()
+        path = parcel.readString()
+        componentName = parcel.readString()
+        flags = parcel.readInt()
+        transition = parcel.readInt()
     }
 
-    override fun describeContents() = 0
+    override fun describeContents(): Int {
+        return 0
+    }
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeParcelable(uri, flags)
+    override fun writeToParcel(dest: Parcel, f: Int) {
         dest.writeBundle(extras)
+        dest.writeString(pactUrl)
         dest.writeString(path)
+        dest.writeString(componentName)
         dest.writeInt(flags)
-        dest.writeInt(timeout)
-        dest.writeInt(enterAnim)
-        dest.writeInt(exitAnim)
         dest.writeInt(transition)
-        dest.writeByte((if (isInterceptLogin) 1 else 0).toByte())
+
     }
 
     companion object {
@@ -393,8 +305,11 @@ class RouterCard() : INavigation(), Parcelable {
             override fun newArray(size: Int): Array<RouterCard?> = arrayOfNulls(size)
         }
 
-        const val TAG = "RouterCard"
-
         const val CLASS_NAME = "className"
+
+        const val TRANSITION = "transition"
     }
+
+
+
 }

@@ -2,17 +2,16 @@ package cn.yue.base.router
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import cn.yue.base.R
-import cn.yue.base.activity.BaseDialogFragment
-import cn.yue.base.activity.BaseFragment
 import cn.yue.base.activity.CommonActivity
-import cn.yue.base.activity.WrapperResultLauncher
-import cn.yue.base.mvvm.BaseViewModel
-import cn.yue.base.mvvm.data.RouterModel
+import cn.yue.base.fragment.BaseDialogFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.utils.code.getString
 import cn.yue.base.utils.debug.ToastUtils
 
@@ -99,10 +98,6 @@ class RouterImpl: INavigation() {
 			is BaseDialogFragment -> {
 				realContext = context.mActivity
 			}
-			is BaseViewModel -> {
-				context.navigation(RouterModel(mRouterCard, requestCode, toActivity))
-				return
-			}
 			is WrapperResultLauncher -> {
 				launch(context, toActivity)
 				return
@@ -127,55 +122,69 @@ class RouterImpl: INavigation() {
 
 	@SuppressLint("WrongConstant")
 	private fun jumpToActivity(context: Context, requestCode: Int) {
-		val className = getDestination()
-		if (className.isEmpty()) {
-			ToastUtils.showShortToast(R.string.app_find_not_page.getString())
-			return
+		try {
+			val className = getDestination()
+			if (className.isEmpty()) {
+				ToastUtils.showShortToast(R.string.app_find_not_page.getString())
+				return
+			}
+			val intent = Intent()
+			intent.putExtras(mRouterCard.getExtras())
+			intent.putExtra(RouterCard.TRANSITION, mRouterCard.getTransition())
+			intent.flags = mRouterCard.getFlags()
+			intent.setClassName(context, className)
+			if (context !is Activity) {
+				context.startActivity(intent)
+				return
+			}
+			val transitionAnimation = ActivityOptions.makeSceneTransitionAnimation(context).toBundle()
+			if (requestCode <= 0) {
+				context.startActivity(intent, transitionAnimation)
+			} else {
+				context.startActivityForResult(intent, requestCode, transitionAnimation)
+			}
+		} catch (e : Exception) {
+			e.printStackTrace()
 		}
-		val intent = Intent()
-		intent.putExtras(mRouterCard.getExtras())
-		intent.flags = mRouterCard.getFlags()
-		intent.setClassName(context, className)
-		if (requestCode <= 0 || context !is Activity) {
-			context.startActivity(intent)
-		} else {
-			context.startActivityForResult(intent, requestCode)
-		}
-		if (context is Activity) {
-			context.overridePendingTransition(mRouterCard.getRealEnterAnim(), mRouterCard.getRealExitAnim())
-		}
+
 	}
 	
 	@SuppressLint("WrongConstant")
 	private fun jumpToFragment(context: Context, toActivity: String? = null, requestCode: Int) {
-		val className = getDestination()
-		if (className.isEmpty()) {
-			ToastUtils.showShortToast(R.string.app_find_not_page.getString())
-			return
-		}
-		val intent = Intent()
-		intent.putExtra(RouterCard.TAG, mRouterCard)
-		intent.putExtras(mRouterCard.getExtras())
-		intent.putExtra(RouterCard.CLASS_NAME, className)
-		intent.flags = mRouterCard.getFlags()
-		if (toActivity == null) {
-			intent.setClass(context, CommonActivity::class.java)
-		} else {
-			intent.setClassName(context, toActivity)
-		}
-		if (requestCode <= 0 || context !is Activity) {
-			context.startActivity(intent)
-		} else {
-			context.startActivityForResult(intent, requestCode)
-		}
-		if (context is Activity) {
-			context.overridePendingTransition(mRouterCard.getRealEnterAnim(), mRouterCard.getRealExitAnim())
+		try {
+			val className = getDestination()
+			if (className.isEmpty()) {
+				ToastUtils.showShortToast(R.string.app_find_not_page.getString())
+				return
+			}
+			val intent = Intent()
+			intent.putExtras(mRouterCard.getExtras())
+			intent.putExtra(RouterCard.CLASS_NAME, className)
+			intent.putExtra(RouterCard.TRANSITION, mRouterCard.getTransition())
+			intent.flags = mRouterCard.getFlags()
+			if (toActivity == null) {
+				intent.setClass(context, CommonActivity::class.java)
+			} else {
+				intent.setClassName(context, toActivity)
+			}
+			if (context !is Activity) {
+				context.startActivity(intent)
+				return
+			}
+			val transitionAnimation = ActivityOptions.makeSceneTransitionAnimation(context).toBundle()
+			if (requestCode <= 0) {
+				context.startActivity(intent, transitionAnimation)
+			} else {
+				context.startActivityForResult(intent, requestCode, transitionAnimation)
+			}
+		} catch (e: Exception) {
+			e.printStackTrace()
 		}
 	}
 	
 	private fun launch(
-		launcher: WrapperResultLauncher,
-		toActivity: String?
+        launcher: WrapperResultLauncher,
+        toActivity: String?
 	) {
 		val realContext = when (launcher.context) {
 			is Context -> {
@@ -206,35 +215,56 @@ class RouterImpl: INavigation() {
 	
 	@SuppressLint("WrongConstant")
 	private fun launchToActivity(context: Context, launcher: WrapperResultLauncher) {
-		val className = getDestination()
-		if (className.isEmpty()) {
-			ToastUtils.showShortToast(R.string.app_find_not_page.getString())
-			return
-		}
-		val intent = Intent()
-		intent.setClassName(context, className)
-		intent.putExtras(mRouterCard.getExtras())
-		intent.flags = mRouterCard.getFlags()
-		launcher.launcher.launch(intent)
-		if (context is Activity) {
-			context.overridePendingTransition(mRouterCard.getRealEnterAnim(), mRouterCard.getRealExitAnim())
+		try {
+			val className = getDestination()
+			if (className.isEmpty()) {
+				ToastUtils.showShortToast(R.string.app_find_not_page.getString())
+				return
+			}
+			val intent = Intent()
+			intent.setClassName(context, className)
+			intent.putExtras(mRouterCard.getExtras())
+			intent.putExtra(RouterCard.CLASS_NAME, className)
+			intent.putExtra(RouterCard.TRANSITION, mRouterCard.getTransition())
+			intent.flags = mRouterCard.getFlags()
+			if (context is Activity) {
+				val transitionAnimation = ActivityOptionsCompat.makeSceneTransitionAnimation(context)
+				launcher.launcher.launch(intent, transitionAnimation)
+			} else {
+				launcher.launcher.launch(intent)
+			}
+		} catch (e: Exception) {
+			e.printStackTrace()
 		}
 	}
 	
 	@SuppressLint("WrongConstant")
 	private fun launchToFragment(context: Context, toActivity: String? = null, launcher: WrapperResultLauncher) {
-		val intent = Intent()
-		intent.putExtra(RouterCard.TAG, mRouterCard)
-		intent.putExtras(mRouterCard.getExtras())
-		intent.flags = mRouterCard.getFlags()
-		if (toActivity == null) {
-			intent.setClass(context, CommonActivity::class.java)
-		} else {
-			intent.setClassName(context, toActivity)
-		}
-		launcher.launcher.launch(intent)
-		if (context is Activity) {
-			context.overridePendingTransition(mRouterCard.getRealEnterAnim(), mRouterCard.getRealExitAnim())
+		try {
+			val className = getDestination()
+			if (className.isEmpty()) {
+				ToastUtils.showShortToast(R.string.app_find_not_page.getString())
+				return
+			}
+			val intent = Intent()
+			intent.putExtras(mRouterCard.getExtras())
+			intent.putExtra(RouterCard.CLASS_NAME, className)
+			intent.putExtra(RouterCard.TRANSITION, mRouterCard.getTransition())
+			intent.flags = mRouterCard.getFlags()
+			if (toActivity == null) {
+				intent.setClass(context, CommonActivity::class.java)
+			} else {
+				intent.setClassName(context, toActivity)
+			}
+			if (context is Activity) {
+				val transitionAnimation =
+					ActivityOptionsCompat.makeSceneTransitionAnimation(context)
+				launcher.launcher.launch(intent, transitionAnimation)
+			} else {
+				launcher.launcher.launch(intent)
+			}
+		} catch (e: Exception) {
+			e.printStackTrace()
 		}
 	}
 }

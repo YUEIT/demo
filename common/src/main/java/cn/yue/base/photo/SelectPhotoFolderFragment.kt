@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.yue.base.R
-import cn.yue.base.activity.BaseFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.image.ImageLoader.Companion.loadImage
 import cn.yue.base.photo.data.MediaData
 import cn.yue.base.photo.data.MediaFolderVO

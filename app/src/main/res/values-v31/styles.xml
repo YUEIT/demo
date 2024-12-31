@@ -3,9 +3,9 @@
     <style name="LaunchTheme" parent="@style/AppTheme">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
-        <item name="android:windowSplashScreenBackground">@color/appColor</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@color/appColor</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_logo</item>
+        <item name="android:windowSplashScreenBackground">@color/app_color</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/app_color</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>
 

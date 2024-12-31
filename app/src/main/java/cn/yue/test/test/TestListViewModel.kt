@@ -1,6 +1,6 @@
 package cn.yue.test.test
 
-import cn.yue.base.mvvm.PageViewModel
+import cn.yue.base.fragment.vm.PageViewModel
 import cn.yue.base.net.wrapper.BaseListBean
 import io.reactivex.rxjava3.core.Single
 

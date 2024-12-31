@@ -11,7 +11,7 @@ import android.view.WindowManager
 import androidx.lifecycle.Lifecycle
 import cn.yue.base.utils.Utils
 import cn.yue.base.utils.app.ActivityUtils.isActivityAlive
-import cn.yue.base.utils.code.ThreadUtils
+import cn.yue.base.utils.code.HandlerUtils
 import java.lang.reflect.InvocationTargetException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -67,7 +67,7 @@ class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
         if (activity == null || listener == null) {
             return
         }
-        ThreadUtils.runOnUiThread(Runnable {
+        HandlerUtils.runOnUiThread(Runnable {
             addActivityLifecycleCallbacksInner(
                 activity,
                 listener
@@ -114,7 +114,7 @@ class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
         if (activity == null) {
             return
         }
-        ThreadUtils.runOnUiThread(Runnable { mActivityLifecycleCallbacksMap.remove(activity) })
+        HandlerUtils.runOnUiThread(Runnable { mActivityLifecycleCallbacksMap.remove(activity) })
     }
 
     fun removeActivityLifecycleCallbacks(
@@ -122,7 +122,7 @@ class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
         callbacks: Application.ActivityLifecycleCallbacks?
     ) {
         if (activity == null || callbacks == null) return
-        ThreadUtils.runOnUiThread(Runnable {
+        HandlerUtils.runOnUiThread(Runnable {
             removeActivityLifecycleCallbacksInner(
                 activity,
                 callbacks
@@ -238,7 +238,7 @@ class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
             activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         } else {
             val tag = activity.window.decorView.getTag(-123) as? Int ?: return
-            ThreadUtils.runOnUiThreadDelayed(Runnable {
+            HandlerUtils.runOnUiThreadDelayed(Runnable {
                 val window = activity.window
                 window?.setSoftInputMode(tag)
             }, 100)

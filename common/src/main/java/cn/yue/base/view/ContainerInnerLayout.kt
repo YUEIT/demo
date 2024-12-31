@@ -11,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.PARENT_ID
 import cn.yue.base.R
 import cn.yue.base.utils.app.BarUtils
-import cn.yue.base.utils.device.KeyboardUtils
 
 /**
  * Description:
@@ -112,17 +111,6 @@ class ContainerInnerLayout : ConstraintLayout {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (window != null) {
-            KeyboardUtils.unregisterSoftInputChangedListener(window!!, getTagInt())
-        }
-    }
-
-    private fun getTagInt(): Int {
-        val hashCode = hashCode()
-        if ((hashCode ushr 24) < 2) {
-            return -hashCode
-        }
-        return hashCode
     }
 
     override fun generateLayoutParams(attrs: AttributeSet): ConstraintLayout.LayoutParams {

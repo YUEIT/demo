@@ -2,10 +2,10 @@ package cn.yue.base.net.upload
 
 import cn.yue.base.activity.rx.ILifecycleProvider
 import cn.yue.base.net.RetrofitManager
-import cn.yue.base.net.observer.BaseUploadObserver
 import cn.yue.base.utils.file.BitmapFileUtils
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -23,17 +23,17 @@ object UploadUtils {
         return uploadServer
     }
 
-    fun <E: Any> upload(files: List<String>, lifecycleProvider: ILifecycleProvider<E>, uploadObserver: BaseUploadObserver) {
+    fun <E: Any> upload(files: List<String>, lifecycleProvider: ILifecycleProvider<E>, uploadObserver: SingleObserver<ImageResultListData>) {
         getCompressFileList(files)
-                .subscribeOn(Schedulers.io())
-                .flatMap { files ->
-                    val url = getUploadKey()
-                    getUploadServer().upload(url, filesToMultipartBodyParts(files))
-                }
-                .subscribeOn(Schedulers.newThread())
-                .compose(lifecycleProvider.toBindLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(uploadObserver)
+            .subscribeOn(Schedulers.io())
+            .flatMap {
+                val url = getUploadKey()
+                getUploadServer().upload(url, filesToMultipartBodyParts(it))
+            }
+            .subscribeOn(Schedulers.newThread())
+            .compose(lifecycleProvider.toBindLifecycle())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(uploadObserver)
     }
 
     private fun filesToMultipartBodyParts(files: List<File>): List<MultipartBody.Part> {
@@ -52,9 +52,7 @@ object UploadUtils {
                     val files = ArrayList<File>()
                     for (url in strings) {
                         val file = BitmapFileUtils.getCompressBitmapFile(url)
-                        if (file != null) {
-                            files.add(file)
-                        }
+                        files.add(file)
                     }
                     Single.just<List<File>>(files)
                 }

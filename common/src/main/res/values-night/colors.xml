@@ -1,0 +1,11 @@
+<resources>
+
+    <color name="progress_color_1">#0057e7</color>
+    <color name="progress_color_2">#008744</color>
+    <color name="progress_color_3">#d62d20</color>
+    <color name="progress_color_4">#ffa700</color>
+
+    <color name="global_background">#121212</color>
+    <color name="global_text_color">#ffffff</color>
+    <color name="global_image_color">#ffffff</color>
+</resources>

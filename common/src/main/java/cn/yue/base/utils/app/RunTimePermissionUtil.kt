@@ -36,7 +36,7 @@ object RunTimePermissionUtil {
                         failed.invoke(it)
                     }, *permissions)
                 }
-                val shouldHints = this.shouldShowToSettingHint(*permissions)
+                val shouldHints = this.shouldShowReasonHint(*permissions)
                 if (shouldHints.isNotEmpty()) {
                     showHintDialog(this, getPermissionName(*permissions)) {
                         launch.invoke()
@@ -64,7 +64,7 @@ object RunTimePermissionUtil {
                         failed.invoke(it)
                     }, *permissions)
                 }
-                val shouldHints = this.shouldShowToSettingHint(*permissions)
+                val shouldHints = this.shouldShowReasonHint(*permissions)
                 if (shouldHints.isNotEmpty()) {
                     showHintDialog(this, getPermissionName(*permissions)) {
                         launch.invoke()
@@ -95,7 +95,7 @@ object RunTimePermissionUtil {
     }
 
 
-    fun Activity.shouldShowToSettingHint(vararg permissions: String): Array<String> {
+    fun Activity.shouldShowReasonHint(vararg permissions: String): Array<String> {
         val permissionList = ArrayList<String>()
         for (p in permissions) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, p)) {

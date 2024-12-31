@@ -3,18 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/v_root"
-    android:background="@android:color/white"
+    android:background="@color/app_color"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/tv0"
-        android:layout_width="match_parent"
+        android:layout_width="90dp"
         android:layout_height="50dp"
         android:background="#23ff55"
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="15sp"
         android:text="action"
+        app:autoSizeTextType="uniform"
         app:layout_constraintTop_toTopOf="parent"/>
 </LinearLayout>

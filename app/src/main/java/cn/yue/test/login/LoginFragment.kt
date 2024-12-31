@@ -2,18 +2,10 @@ package cn.yue.test.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import cn.yue.base.mvvm.components.BaseVMFragment
+import cn.yue.base.fragment.BaseVMFragment
 import cn.yue.base.utils.code.setOnSingleClickListener
 import cn.yue.test.R
 import cn.yue.test.databinding.FragmentLoginBinding
-import cn.yue.test.helper.GlobalEventBus
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class LoginFragment : BaseVMFragment<LoginViewModel>() {
 
@@ -34,26 +26,6 @@ class LoginFragment : BaseVMFragment<LoginViewModel>() {
         binding = FragmentLoginBinding.bind(requireView())
         binding.loginTV.setOnSingleClickListener {
 
-        }
-        binding.flContainer.setOnClickListener {
-            GlobalEventBus.timeState.update { it + 1 }
-        }
-    }
-
-    override fun initObserver() {
-        super.initObserver()
-        GlobalEventBus.timeState
-            .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-            .syncCollect {
-                Log.d("luo", "before: state $it")
-            }
-    }
-
-    fun <T> Flow<T>.syncCollect(block: (t: T) -> Unit) {
-        lifecycleScope.launch {
-            this@syncCollect.collect {
-                block.invoke(it)
-            }
         }
     }
 

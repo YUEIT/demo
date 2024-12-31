@@ -6,7 +6,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import cn.yue.base.R
-import cn.yue.base.activity.BaseFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.router.Route
 import cn.yue.base.utils.code.getParcelableArrayListExt
 

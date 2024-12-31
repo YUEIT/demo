@@ -4,15 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Window
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import cn.yue.base.R
-import cn.yue.base.activity.TransitionAnimation.getStopEnterAnim
-import cn.yue.base.activity.TransitionAnimation.getStopExitAnim
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.router.RouterCard
 import cn.yue.base.utils.app.BarUtils
 import cn.yue.base.utils.app.FragmentUtils
@@ -23,8 +21,7 @@ import java.util.UUID
  * Created by yue on 2019/3/11
  */
 open class CommonActivity : BaseFragmentActivity() {
-    
-    private var transition = 0 //入场动画
+
     private var content: FrameLayout? = null
     private var mCurrentFragment: BaseFragment? = null
     private var resultCode = 0
@@ -37,7 +34,6 @@ open class CommonActivity : BaseFragmentActivity() {
     override fun initView() {
         super.initView()
         registerOnBackPressed()
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         BarUtils.fullScreen(this.window)
         setContentView()
         content = findViewById(R.id.content)
@@ -53,9 +49,7 @@ open class CommonActivity : BaseFragmentActivity() {
     }
 
     open fun getFragment(): Fragment? {
-        val routerCard = intent?.extras?.getParcelable<RouterCard>(RouterCard.TAG)?: return null
         val className = intent.getStringExtra(RouterCard.CLASS_NAME)?: return null
-        transition = routerCard.getTransition()
         val fragment = FragmentUtils.instantiate(this, className)
         fragment.arguments = intent.extras
         return fragment
@@ -108,7 +102,6 @@ open class CommonActivity : BaseFragmentActivity() {
                     }
                     setResult(resultCode, data)
                 }
-                setExitAnim()
                 isEnabled = false
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -126,9 +119,5 @@ open class CommonActivity : BaseFragmentActivity() {
     override fun setFragmentResult(resultCode: Int, resultBundle: Bundle?) {
         this.resultCode = resultCode
         this.resultBundle = resultBundle
-    }
-
-    override fun setExitAnim() {
-        overridePendingTransition(getStopEnterAnim(transition), getStopExitAnim(transition))
     }
 }

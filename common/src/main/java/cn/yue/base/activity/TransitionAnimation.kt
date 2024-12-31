@@ -1,5 +1,6 @@
 package cn.yue.base.activity
 
+import android.view.Gravity
 import cn.yue.base.R
 
 /**
@@ -80,4 +81,25 @@ object TransitionAnimation{
         }
     }
 
+    fun getEnterGravity(transition: Int): Int {
+        return when (transition) {
+            TRANSITION_BOTTOM -> Gravity.BOTTOM
+            TRANSITION_TOP -> Gravity.TOP
+            TRANSITION_LEFT -> Gravity.START
+            TRANSITION_RIGHT -> Gravity.END
+            TRANSITION_CENTER -> Gravity.CENTER
+            else -> Gravity.END
+        }
+    }
+
+    fun getExitGravity(transition: Int): Int {
+        return when (transition) {
+            TRANSITION_BOTTOM -> Gravity.TOP
+            TRANSITION_TOP -> Gravity.BOTTOM
+            TRANSITION_LEFT -> Gravity.END
+            TRANSITION_RIGHT -> Gravity.START
+            TRANSITION_CENTER -> Gravity.CENTER
+            else -> Gravity.START
+        }
+    }
 }

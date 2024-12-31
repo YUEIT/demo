@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import cn.yue.base.R
-import cn.yue.base.activity.BaseFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.router.Route
 import cn.yue.base.view.TitleBarView
 import cn.yue.base.view.TopBarView

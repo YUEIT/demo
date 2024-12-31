@@ -1,6 +1,6 @@
 package cn.yue.test.test
 
-import cn.yue.base.mvvm.components.BasePageVMFragment
+import cn.yue.base.fragment.BasePageVMFragment
 import cn.yue.base.widget.recyclerview.CommonAdapter
 import cn.yue.base.widget.recyclerview.CommonViewHolder
 import cn.yue.test.R

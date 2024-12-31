@@ -2,7 +2,7 @@
 //
 //import android.view.ViewGroup
 //import cn.yue.base.R
-//import cn.yue.base.mvp.components.BaseFooter
+//import cn.yue.base.view.BaseFooter
 //import cn.yue.base.view.load.IFooter
 //import cn.yue.base.view.load.LoadStatus
 //import com.alibaba.android.vlayout.DelegateAdapter

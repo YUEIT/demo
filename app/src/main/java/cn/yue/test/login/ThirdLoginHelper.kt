@@ -3,7 +3,7 @@ import android.content.Intent
 import android.content.IntentSender
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import cn.yue.base.activity.BaseFragment
+import cn.yue.base.fragment.BaseFragment
 import cn.yue.base.utils.debug.LogUtils
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
